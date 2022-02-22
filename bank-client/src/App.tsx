@@ -1,11 +1,11 @@
-import React from 'react';
+import { VFC } from 'react';
 
-function App() {
-  return (
-    <div>
-      Hello world!
-    </div>
-  );
-}
-
+const App: VFC = () => {
+    return (
+        <div>
+            Hello worldakwdnakwndakl
+            <span>Лол</span>
+        </div>
+    );
+};
 export default App;
