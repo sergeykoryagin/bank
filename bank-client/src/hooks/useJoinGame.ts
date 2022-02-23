@@ -2,11 +2,11 @@ import { useSocket } from 'hooks/useSocket';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { usernameAtom } from 'store/username-atom';
+import { authAtom } from 'store/auth-atom';
 
 export const useJoinGame = () => {
     const socket = useSocket();
-    const username = useRecoilValue(usernameAtom);
+    const { username } = useRecoilValue(authAtom);
     const navigate = useNavigate();
     const handleJoin = useCallback(
         (gameId: string) => {

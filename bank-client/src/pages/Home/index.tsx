@@ -1,19 +1,15 @@
-import { useJoinGame } from 'hooks/useJoinGame';
+import { useAuth } from 'hooks/useAuth';
 import { VFC } from 'react';
 
-const GAME_ID = '123121';
-
 export const Home: VFC = () => {
-    const { handleJoin } = useJoinGame();
-
-    const handleJoinClick = () => {
-        handleJoin(GAME_ID);
-    };
-
+    const { name, handleNameChange, handleUsernameSubmit } = useAuth();
     return (
         <div>
-            Home page
-            <button onClick={handleJoinClick}>Войти</button>
+            <h2>Введите ваше имя</h2>
+            <input value={name} onChange={handleNameChange} />
+            <button onClick={handleUsernameSubmit} type='button'>
+                Продолжить
+            </button>
         </div>
     );
 };
