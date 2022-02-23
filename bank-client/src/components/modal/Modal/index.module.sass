@@ -1,3 +1,5 @@
+@import "src/styles/mixins"
+
 .wrapper
     top: 0
     left: 0
@@ -15,9 +17,13 @@
     background-color: rgba(black, 0.5)
     
 .modal
-    background-color: white
+    padding: 24px
+    background-color: $color-secondary
     min-height: 100px
     min-width: 100px
-    border-radius: 8px
+    border-radius: 16px
     
-
+    @media ( max-width: 1024px )
+        min-width: 100%
+        min-height: 100%
+        border-radius: 0

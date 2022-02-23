@@ -1,0 +1,14 @@
+@import "src/styles/mixins"
+
+.button
+    background: linear-gradient(135deg, #DCE4F1 0%, #C1C8D6 100%)
+    box-shadow: 7px 7px 24px #ABB4C3, -6px -6px 10px rgba(255, 255, 255, 0.45)
+    @include font-medium
+    color: $color-primary
+    min-width: 300px
+    text-align: center
+    height: 48px
+    border-radius: 14px
+    
+    &:hover
+        cursor: pointer
