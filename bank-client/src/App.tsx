@@ -1,18 +1,29 @@
-import { SocketProvider } from 'context/SocketContext';
-import { Game } from 'pages/Game';
 import { VFC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { RecoilRoot, useRecoilValue } from 'recoil';
+import { SocketProvider } from 'context/SocketContext';
+import { authAtom } from 'store/auth-atom';
+import { Game } from 'pages/Game';
+import { Lobby } from 'pages/Lobby';
+import { Menu } from 'pages/Menu';
 import { Home } from 'pages/Home';
-import { RecoilRoot } from 'recoil';
 
 const App: VFC = () => {
+    const { isAuth } = useRecoilValue(authAtom);
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<Home />} />
-                <Route path='game'>
-                    <Route path=':gameId' element={<Game />} />
-                </Route>
+                {!isAuth ? (
+                    <Route path='*' element={<Home />} />
+                ) : (
+                    <>
+                        <Route path='*' element={<Menu />} />
+                        <Route path='game'>
+                            <Route path='lobby' element={<Lobby />} />
+                            <Route path=':gameId' element={<Game />} />
+                        </Route>
+                    </>
+                )}
             </Routes>
         </BrowserRouter>
     );
