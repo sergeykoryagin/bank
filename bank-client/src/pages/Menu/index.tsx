@@ -1,9 +1,12 @@
+import { Button } from 'components/Button';
 import { CreateGameModal } from 'components/CreateGameModal';
 import { JoinGameModal } from 'components/JoinGameModal';
+import { Logo } from 'components/Logo';
 import { ModalConstructor } from 'components/modal/ModalConstructor';
 import { VFC } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { modalAtom } from 'store/modal-atom';
+import styles from './index.module.sass';
 
 export const Menu: VFC = () => {
     const setModal = useSetRecoilState(modalAtom);
@@ -15,9 +18,14 @@ export const Menu: VFC = () => {
     };
 
     return (
-        <div>
-            <button onClick={handleCreateClick}>Создать комнату</button>
-            <button onClick={handleJoinClick}>Присоединиться</button>
+        <div className={styles.menu}>
+            <Logo className={styles.logo} />
+            <Button onClick={handleCreateClick} className={styles.createButton}>
+                Создать комнату
+            </Button>
+            <Button onClick={handleJoinClick} className={styles.joinButton}>
+                Присоединиться
+            </Button>
             <ModalConstructor />
         </div>
     );
