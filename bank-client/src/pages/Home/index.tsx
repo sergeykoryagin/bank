@@ -7,6 +7,7 @@ import styles from './index.module.sass';
 
 export const Home: VFC = () => {
     const { name, handleNameChange, handleUsernameSubmit } = useAuth();
+
     return (
         <div className={styles.home}>
             <Logo className={styles.logo} />

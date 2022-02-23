@@ -7,13 +7,22 @@ interface Props {
     checked?: boolean;
     className?: string;
     disabled?: boolean;
+    name?: string;
 }
 
-export const Switch: VFC<Props> = ({ onChange, className, disabled }: Props) => {
+export const Switch: VFC<Props> = ({ onChange, className, disabled, checked, name }: Props) => {
     return (
-        <label className={cn(styles.switch, className)}>
-            <div className={styles.slider} />
+        <label
+            className={cn(styles.switch, className, {
+                [styles.switchChecked]: checked,
+            })}
+        >
+            <div
+                className={styles.slider}
+                style={{ transform: `translateX(${checked ? '24px' : '0px'})` }}
+            />
             <input
+                name={name}
                 onChange={onChange}
                 className={styles.input}
                 disabled={disabled}

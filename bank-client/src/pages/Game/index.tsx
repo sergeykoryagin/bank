@@ -4,7 +4,6 @@ import { mockPlayersAtom } from 'store/mock-players-atom';
 
 export const Game: VFC = () => {
     const mockPlayers = useRecoilValue(mockPlayersAtom);
-
     return (
         <div>
             <div>Game</div>
