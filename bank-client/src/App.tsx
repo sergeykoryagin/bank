@@ -1,22 +1,29 @@
-import { io, Socket } from 'socket.io-client';
-import { useCallback, useEffect, useState, VFC } from 'react';
+import { SocketProvider } from 'context/SocketContext';
+import { Game } from 'pages/Game';
+import { VFC } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Home } from 'pages/Home';
+import { RecoilRoot } from 'recoil';
 
 const App: VFC = () => {
-    const [socket, setSocket] = useState<Socket | null>(null);
-    useEffect(() => {
-        const socket = io('http://localhost:3001');
-        setSocket(socket);
-    }, []);
-
-    const handleButtonClick = useCallback(() => {
-        socket?.emit('message', 'kek');
-    }, [socket]);
-
     return (
-        <div>
-            <span>Лол</span>
-            <button onClick={handleButtonClick}>Отправить на сервер сообщение</button>
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='game'>
+                    <Route path=':gameId' element={<Game />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
     );
 };
-export default App;
+
+export default function AppWrapper() {
+    return (
+        <RecoilRoot>
+            <SocketProvider>
+                <App />
+            </SocketProvider>
+        </RecoilRoot>
+    );
+}
