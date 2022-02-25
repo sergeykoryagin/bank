@@ -1,4 +1,4 @@
-@import "src/styles/mixins"
+@import "../../../styles/mixins"
 
 .switch
     display: flex
@@ -10,6 +10,9 @@
     box-shadow: inset 7px 7px 24px #AFB8C7, inset -6px -6px 10px rgba(255, 255, 255, 0.45)
     background: $color-red-300
     transition: 0.2s ease-in-out
+    
+    &:hover
+        opacity: 0.9
     
     &Checked
         background: $color-switch-on

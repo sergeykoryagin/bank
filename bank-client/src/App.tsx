@@ -21,8 +21,9 @@ const App: VFC = () => {
             <Route path='/' element={<Home />} />
             <Route path='menu' element={<Menu />} />
             <Route path='game'>
-                <Route path='lobby' element={<Lobby />} />
-                <Route path=':gameId' element={<Game />} />
+                <Route path=':gameId' element={<Game />}>
+                    <Route path='lobby' element={<Lobby />} />
+                </Route>
             </Route>
         </Routes>
     );

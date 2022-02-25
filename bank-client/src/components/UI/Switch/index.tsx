@@ -1,6 +1,6 @@
 import { ChangeEvent, VFC } from 'react';
 import cn from 'classnames';
-import styles from './index.module.sass';
+import styles from 'components/UI/Switch/index.module.sass';
 
 interface Props {
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void;

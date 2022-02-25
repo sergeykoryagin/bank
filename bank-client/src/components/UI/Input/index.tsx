@@ -1,6 +1,6 @@
 import { ChangeEvent, VFC } from 'react';
 import cn from 'classnames';
-import styles from './index.module.sass';
+import styles from 'components/UI/Input/index.module.sass';
 
 interface Props {
     className?: string;
@@ -8,16 +8,29 @@ interface Props {
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
     disabled?: boolean;
+    hasError?: boolean;
+    name?: string;
 }
 
-export const Input: VFC<Props> = ({ className, value, onChange, placeholder, disabled }: Props) => {
+export const Input: VFC<Props> = ({
+    className,
+    value,
+    onChange,
+    placeholder,
+    disabled,
+    hasError,
+    name,
+}: Props) => {
     return (
         <input
-            className={cn(styles.input, className)}
+            className={cn(styles.input, className, {
+                [styles.inputError]: hasError,
+            })}
             value={value}
             onChange={onChange}
             placeholder={placeholder}
             disabled={disabled}
+            name={name}
         />
     );
 };
