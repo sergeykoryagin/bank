@@ -1,6 +1,6 @@
 import { FC, MouseEvent } from 'react';
 import cn from 'classnames';
-import styles from './index.module.sass';
+import styles from 'components/UI/Button/index.module.sass';
 
 interface Props {
     onClick?: (event?: MouseEvent<HTMLButtonElement>) => void;

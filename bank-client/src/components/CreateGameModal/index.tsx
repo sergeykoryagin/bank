@@ -1,7 +1,7 @@
-import { Switch } from 'components/Switch';
+import { Switch } from 'components/UI/Switch';
 import { useFormik } from 'formik';
 import { VFC } from 'react';
-import { Button } from 'components/Button';
+import { Button } from 'components/UI/Button';
 import { useModal } from 'hooks/useModal';
 import { useSocket } from 'hooks/useSocket';
 import { Modal } from 'components/modal/Modal';
@@ -29,7 +29,7 @@ export const CreateGameModal: VFC = () => {
             <h2 className={styles.title}>Создание игры</h2>
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.fields}>
-                    <div className={styles.field}>
+                    <label className={styles.field}>
                         <Switch
                             name='gaymode'
                             onChange={handleChange}
@@ -37,8 +37,8 @@ export const CreateGameModal: VFC = () => {
                             className={styles.switch}
                         />
                         <span>Включить gaymode</span>
-                    </div>
-                    <div className={styles.field}>
+                    </label>
+                    <label className={styles.field}>
                         <Switch
                             name='ordered'
                             onChange={handleChange}
@@ -46,7 +46,7 @@ export const CreateGameModal: VFC = () => {
                             className={styles.switch}
                         />
                         <span>Включить очередь gaymode</span>
-                    </div>
+                    </label>
                 </div>
 
                 <Button className={styles.createButton} type='submit'>

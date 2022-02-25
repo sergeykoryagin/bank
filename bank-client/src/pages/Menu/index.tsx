@@ -1,7 +1,7 @@
-import { Button } from 'components/Button';
+import { Button } from 'components/UI/Button';
 import { CreateGameModal } from 'components/CreateGameModal';
 import { JoinGameModal } from 'components/JoinGameModal';
-import { Logo } from 'components/Logo';
+import { Logo } from 'components/UI/Logo';
 import { ModalConstructor } from 'components/modal/ModalConstructor';
 import { VFC } from 'react';
 import { useSetRecoilState } from 'recoil';

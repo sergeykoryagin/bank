@@ -1,0 +1,37 @@
+@import "../../../styles/mixins"
+
+
+.input
+    @include font-medium
+    min-width: 300px
+    height: 48px
+    text-align: left
+    padding-left: 14px
+    
+    border-radius: 14px
+    background: linear-gradient(135deg, #DCE4F1 0%, #C1C8D6 100%)
+    box-shadow: inset 4px 4px 24px #ABB4C3, inset -4px -4px 10px rgba(255, 255, 255, 0.45)
+    color: $color-blue-200
+    
+    transition: 0.2s ease-in-out
+    
+    &::placeholder
+        color: $color-placeholder
+        
+    &:hover
+        box-shadow: inset 4px 4px 24px #BCC5D4, inset -4px -4px 8px rgba(255, 255, 255, 0.45)
+        
+    &:focus
+        box-shadow: inset 4px 4px 8px #BCC5D4, inset -4px -4px 9px rgba(255, 255, 255, 0.45)
+        
+    &Error.inputError
+        box-shadow: inset 4px 4px 24px #ABB4C3, inset -4px -4px 10px rgba(255, 255, 255, 0.45)
+        background: rgba(238, 68, 71, 0.57)
+        &::placeholder
+            color: $color-red-400
+        
+    &:disabled
+        background: linear-gradient(135deg, #D5DDE8 0%, #A3AAB8 100%)
+        box-shadow: inset 4px 4px 24px #8891A0, inset -4px -4px 10px rgba(255, 255, 255, 0.45)
+        cursor: not-allowed
+        

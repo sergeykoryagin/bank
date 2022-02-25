@@ -1,9 +1,9 @@
-import { Button } from 'components/Button';
-import { Input } from 'components/Input';
+import { Button } from 'components/UI/Button';
+import { Input } from 'components/UI/Input';
 import { useModal } from 'hooks/useModal';
 import { ChangeEvent, useState, VFC } from 'react';
 import { Modal } from 'components/modal/Modal';
-import styles from './index.module.sass';
+import styles from 'components/JoinGameModal/index.module.sass';
 
 export const JoinGameModal: VFC = () => {
     const { closeModal } = useModal();
@@ -11,6 +11,7 @@ export const JoinGameModal: VFC = () => {
     const handleGameIdChange = (event: ChangeEvent<HTMLInputElement>) => {
         setGameId(event.target.value);
     };
+
     const handleJoinClick = () => {
         console.log(`join to game: ${gameId}`);
     };

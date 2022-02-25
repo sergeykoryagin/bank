@@ -1,0 +1,25 @@
+@import "../../../styles/mixins"
+
+.button
+    background: linear-gradient(135deg, #DCE4F1 0%, #C1C8D6 100%)
+    box-shadow: 7px 7px 24px #ABB4C3, -6px -6px 10px rgba(255, 255, 255, 0.45)
+    @include font-medium
+    color: $color-blue-300
+    min-width: 300px
+    text-align: center
+    height: 48px
+    border-radius: 14px
+    transition: 0.2s ease-in-out
+    
+    &:hover
+        cursor: pointer
+     
+    &:hover, &:active
+        background: linear-gradient(135deg, #E8F0FD 0%, #979EAC 100%)
+        box-shadow: 8px 8px 15px #ABB4C3, -7px -7px 15px rgba(255, 255, 255, 0.45)
+        
+    &:disabled
+        background: linear-gradient(135deg, #DCE4F1 0%, #C1C8D6 100%)
+        box-shadow: 6px 6px 30px #A9B2C1, -6px -6px 10px rgba(247, 243, 243, 0.45)
+        color: $color-grey-400
+        cursor: not-allowed
