@@ -36,4 +36,9 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
         this.logger.log(gameId, username);
         client.emit('mockData', PlayersMock);
     }
+
+    @SubscribeMessage('createGame')
+    handleCreateGame(client: Socket) {
+        this.logger.log('creating game');
+    }
 }
