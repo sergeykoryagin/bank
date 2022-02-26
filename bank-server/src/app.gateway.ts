@@ -34,6 +34,5 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     @SubscribeMessage('join')
     handleJoinUser(client: Socket, { gameId, username }) {
         this.logger.log(gameId, username);
-        client.emit('mockData', PlayersMock);
     }
 }
