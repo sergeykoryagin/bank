@@ -5,12 +5,14 @@ import { Settings } from '../interfaces/settings';
 
 export class Room {
     players: Player[];
+    hostId: string;
     bank: Bank;
     isStarted = false;
     settings: Settings;
     constructor(settings: Settings, hostName: string) {
         this.settings = settings;
         this.players = [new Player(hostName, this.settings.startMoney)];
+        this.hostId = this.players[0].id;
         this.bank = new Bank(this.settings.bankSettings);
     }
 
@@ -78,6 +80,12 @@ export class Room {
             this.players.push(player);
             return {id: player.id, name: playerName, money: this.settings.startMoney};
         }
+    }
+
+    removePlayer(playerId: string) {
+        this.players = this.players.filter((player) => player.id !== playerId);
+
+        return {id: playerId};
     }
 
     startGame() {
