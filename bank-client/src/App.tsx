@@ -21,9 +21,10 @@ const App: VFC = () => {
             <Route path='/' element={<Home />} />
             <Route path='menu' element={<Menu />} />
             <Route path='game'>
-                <Route path=':gameId' element={<Game />}>
-                    <Route path='lobby' element={<Lobby />} />
-                </Route>
+                <Route path=':gameId' element={<Game />} />
+            </Route>
+            <Route path='lobby'>
+                <Route path=':gameId' element={<Lobby />} />
             </Route>
         </Routes>
     );
@@ -31,12 +32,12 @@ const App: VFC = () => {
 
 export default function AppWrapper() {
     return (
-        <RecoilRoot>
-            <SocketProvider>
-                <BrowserRouter>
+        <BrowserRouter>
+            <RecoilRoot>
+                <SocketProvider>
                     <App />
-                </BrowserRouter>
-            </SocketProvider>
-        </RecoilRoot>
+                </SocketProvider>
+            </RecoilRoot>
+        </BrowserRouter>
     );
 }
