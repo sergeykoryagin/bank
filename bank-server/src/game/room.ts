@@ -7,6 +7,7 @@ import { Settings } from '../interfaces/settings';
 export class Room {
     id: string;
     players: Player[];
+    hostId: string;
     bank: Bank;
     isStarted = false;
     settings: Settings;
@@ -14,6 +15,7 @@ export class Room {
         this.id = v4();
         this.settings = settings;
         this.players = [new Player(hostName, this.settings.startMoney)];
+        this.hostId = this.players[0].id;
         this.bank = new Bank(this.settings.bankSettings);
     }
 
@@ -45,11 +47,15 @@ export class Room {
     sendMoneyToPlayer(idSender, idReceiver: string, amount: number) {
         const sender = this.findPlayers(idSender);
         const receiver = this.findPlayers(idReceiver);
-        if (sender && receiver) this.doTransaction(sender, receiver, amount);
+        if (sender && receiver) {
+            this.doTransaction(sender, receiver, amount);
+        }
     }
 
     addPlayer(playerName: string) {
-        if (!this.isStarted) this.players.push(new Player(playerName, this.settings.startMoney));
+        if (!this.isStarted) {
+            this.players.push(new Player(playerName, this.settings.startMoney));
+        }
     }
 
     startGame() {
