@@ -9,6 +9,9 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { PlayersMock } from 'src/mocks/players.mock';
+import { AppService } from './app.service';
+import { BankSettings } from './interfaces/bank-settings';
+import { Settings } from './interfaces/settings';
 
 @WebSocketGateway(80, {
     cors: true,
@@ -18,6 +21,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     @WebSocketServer()
     server: Server | undefined;
     private logger: Logger = new Logger('AppGateway');
+    private service: AppService = new AppService();
 
     afterInit(server: Server): void {
         this.logger.log(`AppGateway initialized on port 80`);
@@ -38,7 +42,18 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     }
 
     @SubscribeMessage('createGame')
-    handleCreateGame(client: Socket) {
+    handleCreateGame(client: Socket, {idHost, hostname, userStartMoney, bankStartMoney}) {
+        
+        let bankSettings: BankSettings = {
+            bankStartMoney: bankStartMoney
+        };
+
+        let settings: Settings = {
+            startMoney: userStartMoney, 
+            idHost: idHost, 
+            bankSettings: bankSettings
+        };
+
         this.logger.log('creating game');
     }
 }

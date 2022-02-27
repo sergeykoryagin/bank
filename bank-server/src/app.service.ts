@@ -1,41 +1,57 @@
 import { Injectable } from '@nestjs/common';
-import { hostname } from 'os';
+import { v4 } from 'uuid';
 import { Room } from './game/room';
+import { Server, Socket } from 'socket.io';
 import { BankSettings } from './interfaces/bank-settings';
 import { Settings } from './interfaces/settings';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 @Injectable()
 export class AppService {
-    private rooms: Room[] = [];
+    private rooms: Map<string, Room> = new Map<string, Room>();
 
-    findRoom(id: string): Room | undefined {
-        return this.rooms.find((room) => id === room.id);
+    getRoom(id: string): Room | undefined {
+        return this.rooms.get(id);
     }
 
-    createRoom(idHost: number, hostname: string, userStartMoney: number, bankStartMoney: number) {
-        let bankSettings: BankSettings = {bankStartMoney: bankStartMoney};
-        let settings: Settings = {startMoney: userStartMoney, idHost: idHost, bankSettings: bankSettings};
+    createRoom(client: Socket, hostname, string, settings: Settings): string {
+        const id = v4();
         
-        this.rooms.push(new Room(settings, hostname));
+        this.rooms.set(id, new Room(settings, hostname));
+
+        client.join(id);
+        client.emit("room created", {id: id, money: settings.startMoney});
+
+        return id;
     }
 
-    startGame(idGame: string) {
-        this.findRoom(idGame)?.startGame();
+    startGame(client: Socket, idGame: string): void {
+        this.getRoom(idGame)?.startGame();
+        client.to(idGame).emit("start game");
     }
 
-    joinGame(idGame: string, playerName: string) {
-        this.findRoom(idGame)?.addPlayer(playerName);
+    joinGame(client: Socket, idGame: string, playerName: string) {
+        let playerInfo = this.getRoom(idGame)?.addPlayer(playerName);
+
+        client.join(idGame);
+        client.to(idGame).emit("player join", playerInfo);
     }
 
-    doTransaction(idGame: string, idSender: string, idReceiver: string, amount: number) {
-        this.findRoom(idGame)?.sendMoneyToPlayer(idSender, idReceiver, amount);
+    doTransaction(client: Socket, idGame: string, idSender: string, idReceiver: string, amount: number) {
+        let data = this.getRoom(idGame)?.sendMoneyToPlayer(idSender, idReceiver, amount);
+
+        client.to(idGame).emit("player transaction", data);
     }
 
-    getMoneyFromBank(idGame: string, idUser: string, amount: number) {
-        this.findRoom(idGame)?.getMoneyFromBank(idUser, amount);
+    getMoneyFromBank(client: Socket, idGame: string, idUser: string, amount: number) {
+        let data = this.getRoom(idGame)?.getMoneyFromBank(idUser, amount);
+        
+        client.to(idGame).emit("bank transaction", data);
     }
 
-    sendMoneyToBank(idGame: string, idUser: string, amount: number) {
-        this.findRoom(idGame)?.sendMoneyToBank(idUser, amount);
+    sendMoneyToBank(client: Socket, idGame: string, idUser: string, amount: number) {
+        let data = this.getRoom(idGame)?.sendMoneyToBank(idUser, amount);
+
+        client.to(idGame).emit("bank transaction", data);
     }
 }
