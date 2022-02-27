@@ -58,6 +58,10 @@ export class Room {
         }
     }
 
+    removePlayer(playerId: string) {
+        this.players = this.players.filter((player) => player.id !== playerId);
+    }
+
     startGame() {
         if (!this.isStarted) {
             this.isStarted = true;
