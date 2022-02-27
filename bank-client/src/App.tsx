@@ -20,11 +20,11 @@ const App: VFC = () => {
         <Routes>
             <Route path='/' element={<Home />} />
             <Route path='menu' element={<Menu />} />
-            <Route path='game'>
-                <Route path=':gameId' element={<Game />} />
-            </Route>
             <Route path='lobby'>
                 <Route path=':gameId' element={<Lobby />} />
+            </Route>
+            <Route path='game'>
+                <Route path=':gameId' element={<Game />} />
             </Route>
         </Routes>
     );
