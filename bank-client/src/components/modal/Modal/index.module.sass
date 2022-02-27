@@ -14,16 +14,12 @@
     height: 100%
     width: 100%
     position: absolute
-    background-color: rgba(black, 0.5)
+    backdrop-filter: blur(4px)
     
 .modal
-    padding: 24px
+    padding: 16px
     background-color: $color-grey-300
     min-height: 100px
     min-width: 100px
     border-radius: 16px
-    
-    @media ( max-width: 1024px )
-        min-width: 100%
-        min-height: 100%
-        border-radius: 0
+    box-shadow: 7px 7px 24px #AFB8C7, -6px -6px 10px rgba(255, 255, 255, 0.45)
