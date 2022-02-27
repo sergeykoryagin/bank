@@ -1,41 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { hostname } from 'os';
+import { v4 } from 'uuid';
 import { Room } from './game/room';
-import { BankSettings } from './interfaces/bank-settings';
 import { Settings } from './interfaces/settings';
 
 @Injectable()
 export class AppService {
-    private rooms: Room[] = [];
+    private rooms: Map<string, Room> = new Map<string, Room>();
 
-    findRoom(id: string): Room | undefined {
-        return this.rooms.find((room) => id === room.id);
+    getRoom(id: string): Room | undefined {
+        return this.rooms.get(id);
     }
 
-    createRoom(idHost: number, hostname: string, userStartMoney: number, bankStartMoney: number) {
-        let bankSettings: BankSettings = {bankStartMoney: bankStartMoney};
-        let settings: Settings = {startMoney: userStartMoney, idHost: idHost, bankSettings: bankSettings};
-        
-        this.rooms.push(new Room(settings, hostname));
+    createRoom(hostname: string, settings: Settings) {
+        const id = v4();
+        this.rooms.set(id, new Room(settings, hostname));
+
+        return {gameId: id, userid: this.getRoom(id)?.hostId, money: settings.startMoney};
     }
 
-    startGame(idGame: string) {
-        this.findRoom(idGame)?.startGame();
+    startGame(gameId: string): void {
+        this.getRoom(gameId)?.startGame();
     }
 
-    joinGame(idGame: string, playerName: string) {
-        this.findRoom(idGame)?.addPlayer(playerName);
+    joinGame(gameId: string, playerName: string) {
+        return this.getRoom(gameId)?.addPlayer(playerName);
     }
 
-    doTransaction(idGame: string, idSender: string, idReceiver: string, amount: number) {
-        this.findRoom(idGame)?.sendMoneyToPlayer(idSender, idReceiver, amount);
+    doTransaction(gameId: string, idSender: string, idReceiver: string, amount: number) {
+        return this.getRoom(gameId)?.sendMoneyToPlayer(idSender, idReceiver, amount);
     }
 
-    getMoneyFromBank(idGame: string, idUser: string, amount: number) {
-        this.findRoom(idGame)?.getMoneyFromBank(idUser, amount);
+    getMoneyFromBank(gameId: string, idUser: string, amount: number) {
+        return this.getRoom(gameId)?.getMoneyFromBank(idUser, amount);
     }
 
-    sendMoneyToBank(idGame: string, idUser: string, amount: number) {
-        this.findRoom(idGame)?.sendMoneyToBank(idUser, amount);
+    sendMoneyToBank(gameId: string, idUser: string, amount: number) {
+        return this.getRoom(gameId)?.sendMoneyToBank(idUser, amount);
     }
 }

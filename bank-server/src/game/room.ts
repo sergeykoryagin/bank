@@ -1,18 +1,15 @@
-import { v4 } from 'uuid';
 import { Player } from './player';
 import { WithMoney } from '../interfaces/with-money';
 import { Bank } from './bank';
 import { Settings } from '../interfaces/settings';
 
 export class Room {
-    id: string;
     players: Player[];
     hostId: string;
     bank: Bank;
     isStarted = false;
     settings: Settings;
     constructor(settings: Settings, hostName: string) {
-        this.id = v4();
         this.settings = settings;
         this.players = [new Player(hostName, this.settings.startMoney)];
         this.hostId = this.players[0].id;
@@ -24,7 +21,7 @@ export class Room {
     }
 
     doTransaction(sender: WithMoney, receiver: WithMoney, amount: number) {
-        if (sender.money <= amount) {
+        if (sender.money >= amount) {
             sender.money -= amount;
             receiver.money += amount;
         }
@@ -34,6 +31,14 @@ export class Room {
         const player = this.findPlayers(idPlayer);
         if (player) {
             this.doTransaction(this.bank, player, amount);
+
+            let notification = " Bank: " + amount.toString() + " -> " + player.username;
+            return {
+                message: notification,
+                id: idPlayer,
+                money: player.money,
+                bank: this.bank.money
+            }
         }
     }
 
@@ -41,6 +46,14 @@ export class Room {
         const player = this.findPlayers(idPlayer);
         if (player) {
             this.doTransaction(player, this.bank, amount);
+            
+            let notification = player.username + ": " + amount.toString() + " -> " +  "Bank";
+            return {
+                message: notification,
+                id: idPlayer,
+                money: player.money,
+                bank: this.bank.money
+            }
         }
     }
 
@@ -48,18 +61,31 @@ export class Room {
         const sender = this.findPlayers(idSender);
         const receiver = this.findPlayers(idReceiver);
         if (sender && receiver) {
-            this.doTransaction(sender, receiver, amount);
+            let data = this.doTransaction(sender, receiver, amount);
+                
+            let notification = sender.username + " -> " + amount.toString() + " -> " + receiver.username;
+            return {
+                    message: notification,
+                    senderId: idSender,
+                    senderMoney: sender.money,
+                    receiverId: idSender,
+                    receiverMoney: sender.money,
+            };
         }
     }
 
     addPlayer(playerName: string) {
         if (!this.isStarted) {
-            this.players.push(new Player(playerName, this.settings.startMoney));
+            let player = new Player(playerName, this.settings.startMoney);
+            this.players.push(player);
+            return {id: player.id, name: playerName, money: this.settings.startMoney};
         }
     }
 
     removePlayer(playerId: string) {
         this.players = this.players.filter((player) => player.id !== playerId);
+
+        return {id: playerId};
     }
 
     startGame() {
