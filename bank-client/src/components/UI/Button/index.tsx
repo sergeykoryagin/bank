@@ -7,15 +7,17 @@ interface Props {
     className?: string;
     type?: 'button' | 'submit' | 'reset';
     disabled?: boolean;
+    title?: string;
 }
 
-export const Button: FC<Props> = ({ onClick, children, className, type, disabled }) => {
+export const Button: FC<Props> = ({ onClick, children, className, type, disabled, title }) => {
     return (
         <button
             onClick={onClick}
             type={type}
             className={cn(styles.button, className)}
             disabled={disabled}
+            title={title}
         >
             {children}
         </button>

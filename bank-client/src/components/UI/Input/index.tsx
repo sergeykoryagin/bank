@@ -10,6 +10,7 @@ interface Props {
     disabled?: boolean;
     hasError?: boolean;
     name?: string;
+    type?: 'number';
 }
 
 export const Input: VFC<Props> = ({
@@ -20,6 +21,7 @@ export const Input: VFC<Props> = ({
     disabled,
     hasError,
     name,
+    type,
 }: Props) => {
     return (
         <input
@@ -31,6 +33,7 @@ export const Input: VFC<Props> = ({
             placeholder={placeholder}
             disabled={disabled}
             name={name}
+            type={type}
         />
     );
 };

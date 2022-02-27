@@ -1,0 +1,30 @@
+@import "src/styles/mixins"
+
+.game
+    @include page-layout
+    background-color: $color-grey-300
+    
+.wrapper
+    max-width: 350px
+    width: 100%
+    display: flex
+    
+.backButton
+    margin-right: 100px
+    
+.bank
+    margin-bottom: 48px
+    
+.players
+    max-width: 280px
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-around
+    
+.player
+    margin-bottom: 24px
+    &:not(:nth-child(3n))
+        margin-right: 54px
+        
+    &:last-child
+        margin-right: 0

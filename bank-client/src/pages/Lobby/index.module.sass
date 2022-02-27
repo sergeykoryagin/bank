@@ -4,10 +4,19 @@
     @include page-layout
     background-color: $color-grey-300
     
+.header
+    align-items: center
+    max-width: 350px
+    width: 100%
+    display: flex
+    margin-bottom: 36px
+    
+.backButton
+    margin: 0 24px
+    
 .title
     @include font-h1
     text-align: center
-    margin-bottom: 36px
     color: $color-blue-300
     
 .count
@@ -20,6 +29,9 @@
     flex-direction: column
     margin-bottom: 48px
     
+    @media ( max-width: 1024px )
+        flex-grow: 1
+    
 .player
     @include font-p
     font-weight: 700
@@ -29,13 +41,16 @@
         margin-bottom: 24px
     
 .buttons
+    max-width: 350px
     display: flex
+    margin-bottom: 36px
     
 .startButton
     width: 255px
     margin-right: 24px
     
 .copyCodeButton
+    max-width: 48px
     width: 48px
     
 .copyCodeIcon
