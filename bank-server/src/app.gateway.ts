@@ -35,25 +35,63 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
         this.logger.log(`client disconnected (clientID: ${client.id})`);
     }
 
-    @SubscribeMessage('join')
-    handleJoinUser(client: Socket, { gameId, username }) {
-        this.logger.log(gameId, username);
-        client.emit('mockData', PlayersMock);
-    }
-
-    @SubscribeMessage('createGame')
-    handleCreateGame(client: Socket, {idHost, hostname, userStartMoney, bankStartMoney}) {
-        
-        let bankSettings: BankSettings = {
+    @SubscribeMessage('create game')
+    handleCreateGame(client: Socket, {hostname, userStartMoney, bankStartMoney}) {
+        const bankSettings: BankSettings = {
             bankStartMoney: bankStartMoney
         };
 
-        let settings: Settings = {
-            startMoney: userStartMoney, 
-            idHost: idHost, 
+        const settings: Settings = {
+            startMoney: userStartMoney,
             bankSettings: bankSettings
         };
 
-        this.logger.log('creating game');
+        const data = this.service.createRoom(hostname, settings);
+        client.join(data.gameId);
+        client.emit("room created", data);
+
+        this.logger.log('created game: ' + data.gameId);
+    }
+
+    @SubscribeMessage('join')
+    handleJoinUser(client: Socket, { gameId, username }) {
+        let data = this.service.joinGame(gameId, username);
+
+        client.join(gameId);
+        client.to(gameId).emit("player join", data);
+
+        this.logger.log(gameId, username);
+    }
+
+    @SubscribeMessage('start game')
+    handleStartGame(client: Socket, { gameId}) {
+        this.service.startGame(gameId);
+
+        client.to(gameId).emit("start game");
+        this.logger.log("start game: " + gameId.toString());
+    }
+
+    @SubscribeMessage('transaction')
+    handleTransaction(client: Socket, { gameId, idSender, idReceiver, amount}) {
+        const data = this.service.doTransaction(gameId, idSender, idReceiver, amount);
+
+        client.to(gameId).emit("player transaction", data);
+        this.logger.log("player transaction: " + data?.message);
+    }
+
+    @SubscribeMessage('send to bank')
+    handleSendToBank(client: Socket, { gameId, idUser, amount}) {
+        const data = this.service.sendMoneyToBank(gameId, idUser, amount);
+
+        client.to(gameId).emit("send to bank", data);
+        this.logger.log("send to bank: " + data?.message);
+    }
+    
+    @SubscribeMessage('get from bank')
+    handleGetFromBank(client: Socket, { gameId, idUser, amount}) {
+        const data = this.service.getMoneyFromBank(gameId, idUser, amount);
+
+        client.to(gameId).emit("get from bank", data);
+        this.logger.log("get from bank: " + data?.message);
     }
 }
