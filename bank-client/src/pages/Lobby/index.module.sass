@@ -1,0 +1,44 @@
+@import "src/styles/mixins"
+
+.lobby
+    @include page-layout
+    background-color: $color-grey-300
+    
+.title
+    @include font-h1
+    text-align: center
+    margin-bottom: 36px
+    color: $color-blue-300
+    
+.count
+    @include font-p
+    color: $color-blue-300
+    margin-bottom: 36px
+    
+.players
+    display: flex
+    flex-direction: column
+    margin-bottom: 48px
+    
+.player
+    @include font-p
+    font-weight: 700
+    color: $color-blue-300
+    
+    &:not(:last-child)
+        margin-bottom: 24px
+    
+.buttons
+    display: flex
+    
+.startButton
+    width: 255px
+    margin-right: 24px
+    
+.copyCodeButton
+    width: 48px
+    
+.copyCodeIcon
+    fill: $color-blue-200
+    width: 24px
+    height: 24px

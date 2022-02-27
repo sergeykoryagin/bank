@@ -8,7 +8,7 @@ export const SocketProvider: FC = ({ children }) => {
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
-        const socket = io('http://localhost:80', { transports: ['websocket'] });
+        const socket = io('http://192.168.0.103:80', { transports: ['websocket'] });
         setSocket(socket);
     }, []);
 

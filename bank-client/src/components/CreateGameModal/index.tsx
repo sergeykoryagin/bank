@@ -1,54 +1,30 @@
-import { Switch } from 'components/UI/Switch';
-import { useFormik } from 'formik';
-import { VFC } from 'react';
+import { FormEvent, useCallback, VFC } from 'react';
 import { Button } from 'components/UI/Button';
 import { useModal } from 'hooks/useModal';
 import { useSocket } from 'hooks/useSocket';
 import { Modal } from 'components/modal/Modal';
+import { useRecoilValue } from 'recoil';
+import { authAtom } from 'store/auth-atom';
 import styles from './index.module.sass';
-
-const initialSettings = {
-    gaymode: false,
-    ordered: false,
-};
 
 export const CreateGameModal: VFC = () => {
     const { closeModal } = useModal();
+    const { username } = useRecoilValue(authAtom);
     const socket = useSocket();
-    const handleCreateGameClick = (values: typeof initialSettings) => {
-        console.log(values);
-        socket?.emit('createGame', { hostName: '', ...values });
-    };
-    const { handleSubmit, handleChange, values } = useFormik({
-        onSubmit: handleCreateGameClick,
-        initialValues: initialSettings,
-    });
+
+    const handleCreateGameClick = useCallback(
+        (event: FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            socket?.emit('createGame', { hostname: username });
+        },
+        [username, socket],
+    );
 
     return (
         <Modal className={styles.modal}>
             <h2 className={styles.title}>Создание игры</h2>
-            <form onSubmit={handleSubmit} className={styles.form}>
-                <div className={styles.fields}>
-                    <label className={styles.field}>
-                        <Switch
-                            name='gaymode'
-                            onChange={handleChange}
-                            checked={values.gaymode}
-                            className={styles.switch}
-                        />
-                        <span>Включить gaymode</span>
-                    </label>
-                    <label className={styles.field}>
-                        <Switch
-                            name='ordered'
-                            onChange={handleChange}
-                            checked={values.ordered}
-                            className={styles.switch}
-                        />
-                        <span>Включить очередь gaymode</span>
-                    </label>
-                </div>
-
+            <form onSubmit={handleCreateGameClick} className={styles.form}>
+                <div className={styles.fields} />
                 <Button className={styles.createButton} type='submit'>
                     Создать
                 </Button>
