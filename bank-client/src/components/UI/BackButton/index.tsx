@@ -1,6 +1,6 @@
 import { ReactComponent as ArrowBack } from 'assets/svg/arrow-back.svg';
 import cn from 'classnames';
-import styles from './index.module.sass';
+import styles from 'components/UI/BackButton/index.module.sass';
 import { VFC } from 'react';
 import { useNavigate } from 'react-router-dom';
 

@@ -13,9 +13,13 @@ export class AppService {
 
     createRoom(hostname: string, settings: Settings) {
         const id = v4();
-        this.rooms.set(id, new Room(settings, hostname));
+        const room = new Room(settings, hostname);
+        this.rooms.set(id, room);
 
-        return {gameId: id, userid: this.getRoom(id)?.hostId, money: settings.startMoney};
+        return {
+            ...room,
+            id,
+        };
     }
 
     startGame(gameId: string): void {

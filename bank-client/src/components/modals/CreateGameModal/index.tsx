@@ -2,10 +2,10 @@ import { FormEvent, useCallback, VFC } from 'react';
 import { Button } from 'components/UI/Button';
 import { useModal } from 'hooks/useModal';
 import { useSocket } from 'hooks/useSocket';
-import { Modal } from 'components/modal/Modal';
+import { Modal } from 'components/modals/modal/Modal';
 import { useRecoilValue } from 'recoil';
 import { authAtom } from 'store/auth-atom';
-import styles from './index.module.sass';
+import styles from 'components/modals/CreateGameModal/index.module.sass';
 
 export const CreateGameModal: VFC = () => {
     const { closeModal } = useModal();

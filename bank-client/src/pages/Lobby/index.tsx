@@ -1,4 +1,4 @@
-import { BackButton } from 'components/BackButton';
+import { BackButton } from 'components/UI/BackButton';
 import { Button } from 'components/UI/Button';
 import { useSocket } from 'hooks/useSocket';
 import { useEffect, useMemo, VFC } from 'react';
@@ -25,7 +25,7 @@ export const Lobby: VFC = () => {
     }, [game, myId]);
 
     useEffect(() => {
-        game?.isStarted && navigate(`game/${game.id}`);
+        game?.isStarted && navigate(`/game/${game.id}`);
     }, [game, gameId]);
 
     const handleCopyCodeClick = () => {
@@ -33,8 +33,7 @@ export const Lobby: VFC = () => {
     };
 
     const handleStartClick = () => {
-        socket?.emit('startGame', { gameId });
-        navigate(`/game/${gameId}`);
+        socket?.emit('startGame', gameId);
     };
 
     return (

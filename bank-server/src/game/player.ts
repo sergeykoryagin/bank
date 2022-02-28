@@ -7,10 +7,10 @@ export class Player implements WithMoney {
     id: string;
     color: string;
     username: string;
-    constructor(username: string, money: number) {
+    constructor(username: string, money: number, index: number) {
         this.money = money;
         this.id = v4();
-        this.color = getColorByIndex(0);
+        this.color = getColorByIndex(index);
         this.username = username;
     }
 }

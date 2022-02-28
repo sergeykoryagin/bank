@@ -1,53 +1,57 @@
 import { Input } from 'components/UI/Input';
 import { useSocket } from 'hooks/useSocket';
+import { Player } from 'interfaces/player';
 import { ChangeEvent, useState, VFC } from 'react';
 import { Button } from 'components/UI/Button';
 import { useModal } from 'hooks/useModal';
-import { Modal } from 'components/modal/Modal';
+import { Modal } from 'components/modals/modal/Modal';
 import { useRecoilValue } from 'recoil';
 import { authAtom } from 'store/auth-atom';
+import { gameAtom } from 'store/game-atom';
 import { myPlayerSelector } from 'store/my-player-selector';
-import styles from './index.module.sass';
+import styles from 'components/modals/SendMoneyModal/index.module.sass';
 
-export const BankOperationModal: VFC = () => {
+interface Props {
+    player: Player;
+}
+
+export const SendMoneyModal: VFC<Props> = ({ player }: Props) => {
     const { closeModal } = useModal();
+    const { myId } = useRecoilValue(authAtom);
+    const myPlayer = useRecoilValue(myPlayerSelector);
+    const game = useRecoilValue(gameAtom);
+    const socket = useSocket();
     const [money, setMoney] = useState('');
     const [error, setError] = useState('');
-    const myPlayer = useRecoilValue(myPlayerSelector);
-    const { myId } = useRecoilValue(authAtom);
-    const socket = useSocket();
 
     const handleSendMoney = () => {
-        if (+money > Number(myPlayer?.money)) {
-            setError('У вас нет столько денег!');
-        } else if (!isNaN(+money)) {
-            socket?.emit('sendMoneyToBank', { userId: myId, money: +money });
+        if (!error) {
+            socket?.emit('transaction', {
+                gameId: game?.id,
+                receiverId: player.id,
+                money: +money,
+                senderId: myId,
+            });
             closeModal();
-        } else {
-            setError('Введите корректное число!');
-        }
-    };
-
-    const handleGetMoney = () => {
-        if (!isNaN(+money)) {
-            socket?.emit('getMoneyFromBank', { userId: myId, money: +money });
-            closeModal();
-        } else {
-            setError('Введите корректное число!');
         }
     };
 
     const handleMoneyChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setMoney(event.target.value);
-        setError('');
+        const money = event.target.value;
+        if (+money > Number(myPlayer?.money)) {
+            setError('У вас нет столько денег!');
+        } else {
+            setError('');
+        }
+        setMoney(money);
     };
 
     return (
         <Modal
             className={styles.modal}
-            modalStyle={{ background: 'linear-gradient(135deg, #0038FF 0%, #C1C8D6 100%)' }}
+            modalStyle={{ background: `linear-gradient(135deg, ${player.color} 0%, #C1C8D6 100%)` }}
         >
-            <h2 className={styles.title}>Банк</h2>
+            <h2 className={styles.title}>{player.username}</h2>
             <div className={styles.form}>
                 <Input
                     value={money}
@@ -56,6 +60,7 @@ export const BankOperationModal: VFC = () => {
                     placeholder='Введите сумму'
                     type='number'
                     hasError={!!error}
+                    autoFocus
                 />
                 <div className={styles.buttons}>
                     <Button
@@ -65,9 +70,6 @@ export const BankOperationModal: VFC = () => {
                         disabled={!!error}
                     >
                         Перевести
-                    </Button>
-                    <Button className={styles.getButton} onClick={handleGetMoney} type='button'>
-                        Получить
                     </Button>
                     <Button onClick={closeModal} type='button' className={styles.cancelButton}>
                         Отмена

@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import { BankOperationModal } from 'components/BankOperationModal';
+import { BankOperationModal } from 'components/modals/BankOperationModal';
 import { useModal } from 'hooks/useModal';
 import { Bank } from 'interfaces/bank';
 import { VFC } from 'react';

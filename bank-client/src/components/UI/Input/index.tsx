@@ -11,6 +11,7 @@ interface Props {
     hasError?: boolean;
     name?: string;
     type?: 'number';
+    autoFocus?: boolean;
 }
 
 export const Input: VFC<Props> = ({
@@ -22,6 +23,7 @@ export const Input: VFC<Props> = ({
     hasError,
     name,
     type,
+    autoFocus,
 }: Props) => {
     return (
         <input
@@ -34,6 +36,7 @@ export const Input: VFC<Props> = ({
             disabled={disabled}
             name={name}
             type={type}
+            autoFocus={autoFocus}
         />
     );
 };

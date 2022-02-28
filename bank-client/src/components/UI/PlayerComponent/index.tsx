@@ -17,6 +17,7 @@ export const PlayerComponent: VFC<Props> = ({ player, onClick }: Props) => {
                 }}
             />
             <span className={styles.name}>{player.username}</span>
+            <span className={styles.money}>{player.money}</span>
         </button>
     );
 };

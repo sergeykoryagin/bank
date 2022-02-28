@@ -2,7 +2,7 @@ import { useModal } from 'hooks/useModal';
 import { CSSProperties, FC } from 'react';
 import cn from 'classnames';
 import ReactDOM from 'react-dom';
-import styles from './index.module.sass';
+import styles from 'components/modals/modal/Modal/index.module.sass';
 
 interface Props {
     className?: string;

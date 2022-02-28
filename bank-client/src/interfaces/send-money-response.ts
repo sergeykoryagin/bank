@@ -1,10 +1,7 @@
+import { Player } from 'interfaces/player';
+
 export interface SendMoneyResponse {
-    receiver: {
-        id: string;
-        money: number;
-    };
-    sender: {
-        id: string;
-        money: number;
-    };
+    sender: Pick<Player, 'money' | 'id'>;
+    receiver: Pick<Player, 'money' | 'id'>;
+    message: string;
 }
