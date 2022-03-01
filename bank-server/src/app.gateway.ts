@@ -8,8 +8,7 @@ import {
     WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { PlayersMock } from 'src/mocks/players.mock';
-import { ClientRequest } from 'http';
+import { defaultSettings } from 'src/utils/default-settings';
 import { AppService } from './app.service';
 @WebSocketGateway(80, {
     cors: true,
@@ -19,9 +18,9 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     @WebSocketServer()
     server: Server | undefined;
     private logger: Logger = new Logger('AppGateway');
-    private service: AppService = new AppService(); 
+    private service: AppService = new AppService();
 
-    afterInit(server: Server): void {
+    afterInit(): void {
         this.logger.log(`AppGateway initialized on port 80`);
     }
 
@@ -32,51 +31,55 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     handleDisconnect(client: Socket): void {
         this.logger.log(`client disconnected (clientID: ${client.id})`);
     }
-//
-    @SubscribeMessage('join')
+
+    @SubscribeMessage('createGame')
+    handleCreateGame(client: Socket, { hostname, settings = defaultSettings }) {
+        this.logger.log('creating game');
+        const room = this.service.createRoom(hostname, settings);
+        console.log(room.id);
+        client.join(room.id);
+        client.emit('createGame', room);
+    }
+
+    @SubscribeMessage('joinGame')
     handleJoinUser(client: Socket, { gameId, username }) {
         this.logger.log(gameId, username);
-        client.emit('mockData', PlayersMock);
-        const room = this.service.joinGame(gameId, username);
-        if(room)
-        {
-        client.join(room?.id);
+        const data = this.service.joinGame(gameId, username);
+        if (data) {
+            const { player, ...room } = data;
+            this.server?.to(gameId).emit('playerConnected', player);
+            client.join(gameId);
+            client.emit('joinGame', { id: gameId, ...room });
         }
     }
 
-    @SubscribeMessage('createGame')
-    handleCreateGame(client: Socket,{ userHostName, settings}) {
-        this.logger.log('creating game');
-        const room = this.service.createRoom(userHostName, settings);
-        client.join(room.gameId);
-        client.emit('createGame', room);
-    }
-    
     @SubscribeMessage('startGame')
-    handleStartGame(client: Socket, idGame) {
-        this.logger.log('starting game');
-        this.service.startGame(idGame);
-        this.server?.to(idGame).emit('startGame');
+    handleStartGame(client: Socket, gameId) {
+        this.logger.log('starting game' + gameId);
+        this.service.startGame(gameId);
+        this.server?.to(gameId).emit('startGame');
     }
 
     @SubscribeMessage('sendMoneyToBank')
-    handleSendMoneyToBank(client: Socket, {idGame, idUser, amount}) {
+    handleSendMoneyToBank(client: Socket, { gameId, userId, money }) {
         this.logger.log('sending money to bank');
-        const roomparams = this.service.sendMoneyToBank(idGame, idUser, amount);
-        this.server?.to(idGame).emit('bankOperation',{'user':{id:roomparams?.id, money:roomparams?.money}, 'bankMoney':roomparams?.bank});
+        const data = this.service.sendMoneyToBank(gameId, userId, money);
+        console.log(data);
+        this.server?.to(gameId).emit('bankOperation', data);
     }
 
     @SubscribeMessage('getMoneyFromBank')
-    handleGetMoneyFromBank(client: Socket, {idGame, idUser, amount}) {
+    handleGetMoneyFromBank(client: Socket, { gameId, userId, money }) {
         this.logger.log('getting money from bank');
-        const roomparams = this.service.getMoneyFromBank(idGame, idUser, amount);
-        this.server?.to(idGame).emit('bankOperation',{'user':{ id:roomparams?.id, money:roomparams?.money}, bankMoney:roomparams?.bank});
+        const data = this.service.getMoneyFromBank(gameId, userId, money);
+        console.log(data);
+        this.server?.to(gameId).emit('bankOperation', data);
     }
 
-    @SubscribeMessage('sendMoneyToPlayer')
-    handleSendMoneyToPlayer(client: Socket, {idGame, idSender, idReceiver, amount}) {
+    @SubscribeMessage('transaction')
+    handleSendMoneyToPlayer(client: Socket, { gameId, senderId, receiverId, money }) {
         this.logger.log('sending money to player');
-        const roomparams = this.service.doTransaction(idGame, idSender, idReceiver, amount);
-        this.server?.to(idGame).emit('sendMoney', {'receiver':{id:roomparams?.receiverId, money :roomparams?.receiverMoney}, 'sender':{id:roomparams?.senderId,money:roomparams?.senderMoney}});
+        const data = this.service.doTransaction(gameId, senderId, receiverId, money);
+        this.server?.to(gameId).emit('transaction', data);
     }
 }

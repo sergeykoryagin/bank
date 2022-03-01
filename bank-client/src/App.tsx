@@ -1,6 +1,7 @@
 import { useEffect, VFC } from 'react';
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { RecoilRoot, useRecoilValue } from 'recoil';
+import RecoilNexus from 'recoil-nexus';
 import { SocketProvider } from 'context/SocketContext';
 import { authAtom } from 'store/auth-atom';
 import { Game } from 'pages/Game';
@@ -34,6 +35,7 @@ export default function AppWrapper() {
     return (
         <BrowserRouter>
             <RecoilRoot>
+                <RecoilNexus />
                 <SocketProvider>
                     <App />
                 </SocketProvider>

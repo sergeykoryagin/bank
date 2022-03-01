@@ -1,4 +1,4 @@
-@import "src/styles/mixins"
+@import "../../../styles/mixins"
 
 .modal
     display: flex
@@ -7,7 +7,7 @@
     justify-content: flex-start
     max-width: 100%
     width: 355px
-    height: 280px
+    height: 224px
     
 .title
     @include font-p
@@ -23,14 +23,13 @@
     margin-bottom: 24px
     
 .buttons
-    max-width: 100%
+    margin-bottom: 24px
     display: flex
-    flex-wrap: wrap
-    justify-content: space-around
     
-    button
-        width: 150px
-        margin-bottom: 24px
-        
 .sendButton
-    margin-right: 16px
+    width: 180px
+    margin-right: 24px
+    
+.cancelButton
+    width: 130px
+    

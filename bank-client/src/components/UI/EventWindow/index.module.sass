@@ -1,0 +1,22 @@
+@import "src/styles/mixins"
+
+.button
+    max-width: 400px
+    width: 100%
+
+.eventWindow
+    display: flex
+    flex-direction: column
+    height: 100px
+    max-width: 400px
+    width: 100%
+    padding: 16px
+    background: $color-grey-300
+    box-shadow: inset 4px 4px 24px #AFB8C7, inset -6px -6px 10px rgba(255, 255, 255, 0.45)
+    overflow: scroll
+    
+.event
+    margin-left: 20px
+    @include font-p
+    color: $color-blue-300
+    
