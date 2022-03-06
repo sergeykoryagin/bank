@@ -26,7 +26,8 @@ export const setupSocketListeners = (socket: Socket, navigate: NavigateFunction)
     socket.on('joinGame', (gameResponse: GameResponse) => {
         const auth = getRecoil(authAtom);
         setRecoil(gameAtom, gameResponse);
-        const id = `${gameResponse.players.at(-1)?.id}`;
+        const playersCount = gameResponse.players.length;
+        const id = `${gameResponse.players[playersCount - 1]?.id}`;
         localStorage.setItem('myId', id);
         setRecoil(authAtom, { ...auth, myId: id });
         navigate(`lobby/${gameResponse.id}`);
