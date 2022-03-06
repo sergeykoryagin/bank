@@ -9,7 +9,10 @@ export const useAuth = () => {
     const navigate = useNavigate();
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setName(event.target.value);
+        const newName = event.target.value;
+        if (newName.length < 16) {
+            setName(event.target.value);
+        }
     };
 
     const handleUsernameSubmit = () => {

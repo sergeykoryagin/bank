@@ -64,7 +64,6 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     handleSendMoneyToBank(client: Socket, { gameId, userId, money }) {
         this.logger.log('sending money to bank');
         const data = this.service.sendMoneyToBank(gameId, userId, money);
-        console.log(data);
         this.server?.to(gameId).emit('bankOperation', data);
     }
 
@@ -72,7 +71,6 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     handleGetMoneyFromBank(client: Socket, { gameId, userId, money }) {
         this.logger.log('getting money from bank');
         const data = this.service.getMoneyFromBank(gameId, userId, money);
-        console.log(data);
         this.server?.to(gameId).emit('bankOperation', data);
     }
 

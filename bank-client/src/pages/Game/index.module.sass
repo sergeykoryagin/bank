@@ -4,28 +4,28 @@
     @include page-layout
     background-color: $color-grey-300
     
-.wrapper
+.topWrapper
+    position: relative
+    height: 88px
     max-width: 350px
     width: 100%
     display: flex
-    
-.backButton
-    margin-right: 100px
+    margin-bottom: 48px
     
 .bank
-    margin-bottom: 48px
+    position: absolute
+    left: 50%
+    transform: translateX(-50%)
     
 .players
     flex-grow: 1
     max-width: 280px
-    display: flex
-    flex-wrap: wrap
-    justify-content: space-around
+    display: grid
+    grid-template-rows: 108px
+    grid-template-columns: 1fr 1fr 1fr
+    justify-content: center
+    column-gap: 54px
+    row-gap: 24px
     
 .player
     margin-bottom: 24px
-    &:not(:nth-child(3n))
-        margin-right: 54px
-        
-    &:last-child
-        margin-right: 0
