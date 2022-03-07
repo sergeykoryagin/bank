@@ -42,7 +42,7 @@ export class Game {
         }
     }
 
-    private getPlayerById(id: string): Player | undefined {
+    getPlayerById(id: string): Player | undefined {
         return this.players.find((player) => player.id === id);
     }
 
@@ -131,11 +131,6 @@ export class Game {
                 },
             };
         }
-        return {
-            success: false,
-            message: `Ошибка операции`,
-            type,
-        };
     };
 
     private sendMoneyToBank = ({
@@ -160,11 +155,6 @@ export class Game {
                 },
             };
         }
-        return {
-            success: false,
-            message: `Ошибка операции`,
-            type,
-        };
     };
 
     private sendMoneyToPlayer = ({

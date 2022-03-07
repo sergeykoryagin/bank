@@ -23,13 +23,11 @@ export const setupSocketListeners = (socket: Socket, navigate: NavigateFunction)
         navigate(`lobby/${gameId}`);
     });
 
-    socket.on('joinGame', (gameResponse: GameResponse) => {
+    socket.on('joinGame', (gameResponse: GameResponse, myId: string) => {
         const auth = getRecoil(authAtom);
         setRecoil(gameAtom, gameResponse);
-        const playersCount = gameResponse.players.length;
-        const id = `${gameResponse.players[playersCount - 1]?.id}`;
-        localStorage.setItem('myId', id);
-        setRecoil(authAtom, { ...auth, myId: id });
+        localStorage.setItem('myId', myId);
+        setRecoil(authAtom, { ...auth, myId: myId });
         navigate(`lobby/${gameResponse.id}`);
     });
 
@@ -41,6 +39,24 @@ export const setupSocketListeners = (socket: Socket, navigate: NavigateFunction)
             setRecoil(gameAtom, { ...lobby, players: newPlayers });
         }
     });
+
+    socket.on(
+        'playerReconnected',
+        (reconnectedPlayer: Player & { oldId: string }, hostId?: string) => {
+            const game = getRecoil(gameAtom);
+            if (game) {
+                const newPlayers = game.players.map((player) => {
+                    if (player.id === reconnectedPlayer.oldId) {
+                        const { oldId, ...newPlayer } = reconnectedPlayer;
+                        return newPlayer;
+                    }
+                    return player;
+                });
+                setRecoil(gameAtom, { ...game, players: newPlayers });
+                hostId && setRecoil(gameAtom, { ...game, hostId });
+            }
+        },
+    );
 
     socket.on('startGame', () => {
         const lobby = getRecoil(gameAtom);
