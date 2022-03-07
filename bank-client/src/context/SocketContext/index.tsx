@@ -10,7 +10,7 @@ export const SocketProvider: FC = ({ children }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const socket = io('http://192.168.0.103:80', { transports: ['websocket'] });
+        const socket: Socket = io('192.168.0.103:80', { transports: ['websocket'] });
         setSocket(socket);
         setupSocketListeners(socket, navigate);
     }, []);

@@ -1,5 +1,6 @@
 import { Input } from 'components/UI/Input';
 import { useSocket } from 'hooks/useSocket';
+import { GameOperationType } from 'interfaces/operations/game-operation-type.enum';
 import { ChangeEvent, useState, VFC } from 'react';
 import { Button } from 'components/UI/Button';
 import { useModal } from 'hooks/useModal';
@@ -23,7 +24,14 @@ export const BankOperationModal: VFC = () => {
         if (+money > Number(myPlayer?.money)) {
             setError('У вас нет столько денег!');
         } else if (!isNaN(+money)) {
-            socket?.emit('sendMoneyToBank', { userId: myId, money: +money, gameId: game?.id });
+            socket?.emit('operation', {
+                gameId: game?.id,
+                operation: {
+                    type: GameOperationType.SEND_MONEY_TO_BANK,
+                    playerId: myId,
+                    money: +money,
+                },
+            });
             closeModal();
         } else {
             setError('Введите корректное число!');
@@ -32,7 +40,14 @@ export const BankOperationModal: VFC = () => {
 
     const handleGetMoney = () => {
         if (!isNaN(+money)) {
-            socket?.emit('getMoneyFromBank', { userId: myId, money: +money, gameId: game?.id });
+            socket?.emit('operation', {
+                gameId: game?.id,
+                operation: {
+                    type: GameOperationType.GET_MONEY_FROM_BANK,
+                    playerId: myId,
+                    money: +money,
+                },
+            });
             closeModal();
         } else {
             setError('Введите корректное число!');
