@@ -211,11 +211,11 @@ class Daemon(object):
             self.log('Process (pid %d) is killed' % pid)
             return False
  
-        def _prepare_process(self, process):
+    def _prepare_process(self, process):
             if process is not None:
                 process.terminate()
 
-        def run(self):
+    def run(self):
             self.pull_updates = subprocess.Popen(["git", "pull"])
             self.pull_updates.wait()
 
