@@ -25,9 +25,19 @@ export class AppService {
         this.getGame(gameId)?.startGame();
     }
 
-    joinGame(gameId: string, user: User) {
+    joinGame(gameId: string, user: User & { oldId?: string }) {
         const game = this.getGame(gameId);
         if (game) {
+            if (user.oldId && game.getPlayerById(user.oldId)) {
+                const player = game.getPlayerById(user.oldId)!;
+                player.id = user.id;
+                player.username = user.username;
+                const hostId = game.hostId;
+                if (hostId === user.oldId) {
+                    game.hostId = user.id;
+                }
+                return { game, reconnectedPLayer: player, hostId };
+            }
             return {
                 game,
                 newPlayer: game.addPlayer(user),

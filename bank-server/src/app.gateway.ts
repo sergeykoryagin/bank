@@ -48,17 +48,22 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     }
 
     @SubscribeMessage('joinGame')
-    handleJoinUser(client: Socket, { gameId, username }) {
-        const user: User = {
+    handleJoinUser(client: Socket, { gameId, username, oldId }) {
+        const user: User & { oldId?: string } = {
             username,
             id: client.id,
+            oldId,
         };
         const data = this.service.joinGame(gameId, user);
         if (data) {
-            const { newPlayer, game } = data;
-            this.server?.to(gameId).emit('playerConnected', newPlayer);
+            const { newPlayer, game, reconnectedPLayer, hostId } = data;
+            newPlayer && this.server?.to(gameId).emit('playerConnected', newPlayer);
+            reconnectedPLayer &&
+                this.server
+                    ?.to(gameId)
+                    .emit('playerReconnected', { ...reconnectedPLayer, oldId }, hostId);
             client.join(gameId);
-            client.emit('joinGame', game);
+            client.emit('joinGame', game, user.id);
         }
         this.logger.log(`User: ${JSON.stringify(user)} connected to game: ${gameId}`);
     }

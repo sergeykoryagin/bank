@@ -6,6 +6,7 @@ export interface GameResponse {
     id: string;
     players: Array<Player>;
     bank: Bank;
+    hostId: string;
     settings: GameSettings;
     isStarted: boolean;
 }
