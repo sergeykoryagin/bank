@@ -1,16 +1,15 @@
-import { WithMoney } from '../interfaces/with-money';
-import { getColorByIndex } from '../utils/getColorByIndex';
-import { v4 } from 'uuid';
+import { PlayerConfig } from 'src/interfaces/configs/player-config';
+import { getColorByIndex } from 'src/utils/getColorByIndex';
 
-export class Player implements WithMoney {
+export class Player {
     money: number;
     id: string;
     color: string;
     username: string;
-    constructor(username: string, money: number, index: number) {
+    constructor({ username, money, index, id }: PlayerConfig) {
         this.money = money;
-        this.id = v4();
-        this.color = getColorByIndex(index);
         this.username = username;
+        this.color = getColorByIndex(index);
+        this.id = id;
     }
 }

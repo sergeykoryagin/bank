@@ -1,9 +1,13 @@
-import { WithMoney } from '../interfaces/with-money';
-import { BankSettings } from '../interfaces/bank-settings';
+import { BankConfig } from 'src/interfaces/configs/bank-config';
+import { Credit } from 'src/interfaces/credit';
 
-export class Bank implements WithMoney {
+export class Bank {
     money: number;
-    constructor(bankSettings: BankSettings) {
-        this.money = bankSettings.bankStartMoney;
+    credits?: Map<string, Credit>;
+    constructor({ startMoney, hasCredits }: BankConfig) {
+        this.money = startMoney;
+        if (hasCredits) {
+            this.credits = new Map<string, Credit>();
+        }
     }
 }

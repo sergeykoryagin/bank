@@ -1,7 +1,6 @@
-import { BankOperationResponse } from 'interfaces/bank-operation-response';
 import { GameResponse } from 'interfaces/game-response';
+import { OperationResult } from 'interfaces/operations/results/operation-result';
 import { Player } from 'interfaces/player';
-import { SendMoneyResponse } from 'interfaces/send-money-response';
 import { NavigateFunction } from 'react-router-dom';
 import { Socket } from 'socket.io-client';
 import { getRecoil, setRecoil } from 'recoil-nexus';
@@ -9,6 +8,7 @@ import { authAtom } from 'store/auth-atom';
 import { eventsAtom } from 'store/events-atom';
 import { gameAtom } from 'store/game-atom';
 import { playersSelector } from 'store/players-selector';
+import { getOperationByType } from 'utils/operations/get-operation-by-type';
 
 export const setupSocketListeners = (socket: Socket, navigate: NavigateFunction) => {
     socket.on('createGame', (gameResponse: GameResponse) => {
@@ -23,13 +23,11 @@ export const setupSocketListeners = (socket: Socket, navigate: NavigateFunction)
         navigate(`lobby/${gameId}`);
     });
 
-    socket.on('joinGame', (gameResponse: GameResponse) => {
+    socket.on('joinGame', (gameResponse: GameResponse, myId: string) => {
         const auth = getRecoil(authAtom);
         setRecoil(gameAtom, gameResponse);
-        const playersCount = gameResponse.players.length;
-        const id = `${gameResponse.players[playersCount - 1]?.id}`;
-        localStorage.setItem('myId', id);
-        setRecoil(authAtom, { ...auth, myId: id });
+        localStorage.setItem('myId', myId);
+        setRecoil(authAtom, { ...auth, myId: myId });
         navigate(`lobby/${gameResponse.id}`);
     });
 
@@ -42,6 +40,24 @@ export const setupSocketListeners = (socket: Socket, navigate: NavigateFunction)
         }
     });
 
+    socket.on(
+        'playerReconnected',
+        (reconnectedPlayer: Player & { oldId: string }, hostId?: string) => {
+            const game = getRecoil(gameAtom);
+            if (game) {
+                const newPlayers = game.players.map((player) => {
+                    if (player.id === reconnectedPlayer.oldId) {
+                        const { oldId, ...newPlayer } = reconnectedPlayer;
+                        return newPlayer;
+                    }
+                    return player;
+                });
+                setRecoil(gameAtom, { ...game, players: newPlayers });
+                hostId && setRecoil(gameAtom, { ...game, hostId });
+            }
+        },
+    );
+
     socket.on('startGame', () => {
         const lobby = getRecoil(gameAtom);
         if (lobby) {
@@ -49,50 +65,12 @@ export const setupSocketListeners = (socket: Socket, navigate: NavigateFunction)
         }
     });
 
-    socket.on('transaction', (sendMoneyResponse: SendMoneyResponse) => {
-        const lobby = getRecoil(gameAtom);
-        const players = getRecoil(playersSelector);
-        const events = getRecoil(eventsAtom);
-        if (lobby && players && sendMoneyResponse) {
-            const newPlayers = players.map((player) => {
-                if (player.id === sendMoneyResponse.sender.id) {
-                    return {
-                        ...player,
-                        money: sendMoneyResponse.sender.money,
-                    };
-                }
-                if (player.id === sendMoneyResponse.receiver.id) {
-                    return {
-                        ...player,
-                        money: sendMoneyResponse.receiver.money,
-                    };
-                }
-                return player;
-            });
-            setRecoil(gameAtom, { ...lobby, players: newPlayers });
-            setRecoil(eventsAtom, [sendMoneyResponse.message, ...events]);
+    socket.on('operation', (operationResult: OperationResult) => {
+        if (operationResult.success) {
+            const operationMethod = getOperationByType(operationResult.type);
+            operationMethod(operationResult);
         }
-    });
-    socket.on('bankOperation', (bankOperation: BankOperationResponse) => {
-        const lobby = getRecoil(gameAtom);
-        const players = getRecoil(playersSelector);
         const events = getRecoil(eventsAtom);
-        if (lobby && players) {
-            const newPlayers = players.map((player) => {
-                if (player.id === bankOperation.user.id) {
-                    return {
-                        ...player,
-                        money: bankOperation.user.money,
-                    };
-                }
-                return player;
-            });
-            setRecoil(gameAtom, {
-                ...lobby,
-                players: newPlayers,
-                bank: { ...lobby.bank, money: bankOperation.bankMoney },
-            });
-            setRecoil(eventsAtom, [bankOperation.message, ...events]);
-        }
+        setRecoil(eventsAtom, [operationResult.message, ...events]);
     });
 };

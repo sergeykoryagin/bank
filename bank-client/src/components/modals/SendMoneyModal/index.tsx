@@ -1,5 +1,6 @@
 import { Input } from 'components/UI/Input';
 import { useSocket } from 'hooks/useSocket';
+import { GameOperationType } from 'interfaces/operations/game-operation-type.enum';
 import { Player } from 'interfaces/player';
 import { ChangeEvent, useState, VFC } from 'react';
 import { Button } from 'components/UI/Button';
@@ -26,11 +27,14 @@ export const SendMoneyModal: VFC<Props> = ({ player }: Props) => {
 
     const handleSendMoney = () => {
         if (!error) {
-            socket?.emit('transaction', {
+            socket?.emit('operation', {
                 gameId: game?.id,
-                receiverId: player.id,
-                money: +money,
-                senderId: myId,
+                operation: {
+                    type: GameOperationType.SEND_MONEY_TO_PLAYER,
+                    senderId: myId,
+                    receiverId: player.id,
+                    money: +money,
+                },
             });
             closeModal();
         }

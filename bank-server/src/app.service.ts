@@ -1,44 +1,59 @@
 import { Injectable } from '@nestjs/common';
+import { Game } from 'src/game/game';
+import { GameOperation } from 'src/interfaces/operations/game-operation';
+import { OperationResult } from 'src/interfaces/operations/operation-result';
+import { User } from 'src/interfaces/user';
 import { v4 } from 'uuid';
-import { Room } from './game/room';
-import { Settings } from './interfaces/settings';
+import { GameSettings } from 'src/interfaces/settings/game-settings';
 
 @Injectable()
 export class AppService {
-    private rooms: Map<string, Room> = new Map<string, Room>();
+    private games: Map<string, Game> = new Map<string, Game>();
 
-    getRoom(id: string): Room | undefined {
-        return this.rooms.get(id);
+    private getGame(id: string): Game | undefined {
+        return this.games.get(id);
     }
 
-    createRoom(hostname: string, settings: Settings) {
+    createGame(host: User, settings: GameSettings) {
         const id = v4();
-        const room = new Room(settings, hostname);
-        this.rooms.set(id, room);
-
-        return {
-            ...room,
-            id,
-        };
+        const game = new Game({ host, settings, id });
+        this.games.set(id, game);
+        return game;
     }
 
     startGame(gameId: string): void {
-        this.getRoom(gameId)?.startGame();
+        this.getGame(gameId)?.startGame();
     }
 
-    joinGame(gameId: string, playerName: string) {
-        return this.getRoom(gameId)?.addPlayer(playerName);
+    joinGame(gameId: string, user: User & { oldId?: string }) {
+        const game = this.getGame(gameId);
+        if (game) {
+            if (user.oldId && game.getPlayerById(user.oldId)) {
+                const player = game.getPlayerById(user.oldId)!;
+                player.id = user.id;
+                player.username = user.username;
+                const hostId = game.hostId;
+                if (hostId === user.oldId) {
+                    game.hostId = user.id;
+                }
+                return { game, reconnectedPLayer: player, hostId };
+            }
+            return {
+                game,
+                newPlayer: game.addPlayer(user),
+            };
+        }
     }
 
-    doTransaction(gameId: string, idSender: string, idReceiver: string, amount: number) {
-        return this.getRoom(gameId)?.sendMoneyToPlayer(idSender, idReceiver, amount);
-    }
-
-    getMoneyFromBank(gameId: string, idUser: string, amount: number) {
-        return this.getRoom(gameId)?.getMoneyFromBank(idUser, amount);
-    }
-
-    sendMoneyToBank(gameId: string, idUser: string, amount: number) {
-        return this.getRoom(gameId)?.sendMoneyToBank(idUser, amount);
+    doOperation(gameId: string, operation: GameOperation): OperationResult {
+        const game = this.getGame(gameId);
+        const operationResult = game?.doOperation(operation);
+        return (
+            operationResult || {
+                success: false,
+                message: `Ошибка операции`,
+                type: operation.type,
+            }
+        );
     }
 }

@@ -1,3 +1,3 @@
 export interface BankSettings {
-    bankStartMoney: number;
+    startMoney: number;
 }

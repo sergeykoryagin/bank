@@ -18,7 +18,7 @@ export const JoinGameModal: VFC = () => {
     };
 
     const handleJoinClick = useCallback(() => {
-        socket?.emit('joinGame', { gameId, username });
+        socket?.emit('joinGame', { gameId, username, oldId: localStorage.getItem('myId') });
         closeModal();
     }, [socket, gameId]);
 
