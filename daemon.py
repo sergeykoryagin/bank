@@ -224,14 +224,16 @@ class Daemon(object):
         self.pull_updates.wait()
 
         self._prepare_process(self.client_process)
-        _prepare_process(self.server_process)
+        self._prepare_process(self.server_process)
 
         self.client_process = subprocess.Popen(["cd", "bank-client", "&&", "yarn", "start"])
         self.server_process = subprocess.Popen(["cd", "bank-server", "&&", "yarn", "start"])
 
+        print(self.client_process.stdout)
+        print(self.server_process.stdout)
         self.client_process.wait()
         self.server_process.wait()
-        print("end run!")
+        
 
 if __name__ == "__main__":
         daemon = Daemon(str(pathlib.Path().resolve())+'/tmp/daemon-example.pid')
