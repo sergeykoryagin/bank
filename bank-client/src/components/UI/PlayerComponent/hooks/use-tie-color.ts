@@ -1,16 +1,23 @@
+import { Player } from 'interfaces/player';
 import { RefObject, useEffect, useRef } from 'react';
 
-export const useTieColor = (color: string) => {
+export const useTieColor = ({ id, color }: Player) => {
     const tieRef: RefObject<SVGSVGElement> = useRef(null);
 
     useEffect(() => {
         if (tieRef.current) {
-            const elem1 = tieRef.current.querySelector('#place1');
-            const elem2 = tieRef.current.querySelector('#place2');
-            elem1?.setAttribute('stop-color', color);
-            elem2?.setAttribute('stop-color', color);
+            const paths = tieRef.current.querySelectorAll('path');
+            paths.item(0)?.setAttribute('fill', `url(#grad1_tie${id})`);
+            paths.item(1)?.setAttribute('fill', `url(#grad2_tie${id})`);
+
+            const gradients = tieRef.current.querySelectorAll('linearGradient');
+            gradients.item(0)?.setAttribute('id', `grad1_tie${id}`);
+            gradients.item(1)?.setAttribute('id', `grad2_tie${id}`);
+
+            gradients.item(0)?.querySelector('stop')?.setAttribute('stop-color', color);
+            gradients.item(1)?.querySelector('stop')?.setAttribute('stop-color', color);
         }
-    }, [tieRef]);
+    }, [id, color, tieRef]);
 
     return tieRef;
 };

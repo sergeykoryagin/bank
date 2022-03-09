@@ -1,7 +1,7 @@
 <svg width="25" height="40" viewBox="0 0 25 40" xmlns="http://www.w3.org/2000/svg">
 <g filter="url(#filter0_dd_265_834)">
-<path d="M6 29.2001L10.3333 12.5251H14.6667L19 29.2001L12.5 35.0001L6 29.2001Z" fill="url(#paint0_linear_265_834)" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M10.3334 6H14.6667L16.8334 7.45L14.6667 12.525H10.3334L8.16675 7.45L10.3334 6Z" fill="url(#paint1_linear_265_834)" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M6 29.2001L10.3333 12.5251H14.6667L19 29.2001L12.5 35.0001L6 29.2001Z" fill="url(#grad1_tie)" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.3334 6H14.6667L16.8334 7.45L14.6667 12.525H10.3334L8.16675 7.45L10.3334 6Z" fill="url(#grad2_tie)" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 <defs>
 <filter id="filter0_dd_265_834" x="0.5" y="0.5" width="24" height="40.0002" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
@@ -20,12 +20,12 @@
 <feBlend mode="normal" in2="effect1_dropShadow_265_834" result="effect2_dropShadow_265_834"/>
 <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_265_834" result="shape"/>
 </filter>
-<linearGradient id="paint0_linear_265_834" x1="19.3611" y1="33.8764" x2="11.3089" y2="12.8718" gradientUnits="userSpaceOnUse">
-<stop id="place1" stop-color="#E20000"/>
+<linearGradient x1="19.3611" y1="33.8764" x2="11.3089" y2="12.8718" gradientUnits="userSpaceOnUse">
+<stop id="place1" />
 <stop offset="1" stop-color="white"/>
 </linearGradient>
-<linearGradient id="paint1_linear_265_834" x1="17.0742" y1="12.1987" x2="15.9382" y2="5.39412" gradientUnits="userSpaceOnUse">
-<stop id="place2" stop-color="#E20000"/>
+<linearGradient x1="17.0742" y1="12.1987" x2="15.9382" y2="5.39412" gradientUnits="userSpaceOnUse">
+<stop id="place2"/>
 <stop offset="1" stop-color="white"/>
 </linearGradient>
 </defs>
