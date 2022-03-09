@@ -41,7 +41,6 @@ jobs:
       working-directory: ./bank-client
 
     - name: Use Node.js ${{ matrix.node-version }} for server
-      working-directory: ./bank-server
       uses: actions/setup-node@v2
       with:
         working-directory: ./bank-server
