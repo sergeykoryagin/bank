@@ -21,8 +21,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }} for client
+    - name: Go to client dir
       run: cd bank-client
+    - name: Use Node.js ${{ matrix.node-version }} for client
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
@@ -32,8 +33,9 @@ jobs:
     - run: npm run build --if-present
     - run: npm test
 
-    - name: Use Node.js ${{ matrix.node-version }} for server
+    - name: Go to server dir
       run: cd bank-server
+    - name: Use Node.js ${{ matrix.node-version }} for server
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
