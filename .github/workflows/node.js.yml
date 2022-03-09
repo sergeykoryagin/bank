@@ -21,12 +21,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }} for client
-      uses: actions/setup-node@v2
-      with:
-        working-directory: ./bank-client
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+    - name: Configure NPM client
+      working-directory: ./bank-client
+      run: |
+        echo "//npm.pkg.github.com/:_authToken=\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" >> .npmrc
+        echo "always-auth: true" >> .npmrc
         
     - name: Npm client ci
       run: npm ci
@@ -40,12 +39,11 @@ jobs:
       run: npm test
       working-directory: ./bank-client
 
-    - name: Use Node.js ${{ matrix.node-version }} for server
-      uses: actions/setup-node@v2
-      with:
-        working-directory: ./bank-server
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+    - name: Configure NPM server
+      working-directory: ./bank-server
+      run: |
+        echo "//npm.pkg.github.com/:_authToken=\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" >> .npmrc
+        echo "always-auth: true" >> .npmrc
 
     - name: Npm server ci
       run: npm ci
