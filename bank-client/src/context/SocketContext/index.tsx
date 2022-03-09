@@ -10,7 +10,9 @@ export const SocketProvider: FC = ({ children }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const socket: Socket = io('192.168.0.103:80', { transports: ['websocket'] });
+        const socket: Socket = io(`${process.env.REACT_APP_API_URL}`, {
+            transports: ['websocket'],
+        });
         setSocket(socket);
         setupSocketListeners(socket, navigate);
     }, []);
