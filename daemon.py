@@ -215,19 +215,21 @@ class Daemon(object):
             return False
  
     def _prepare_process(self, process):
-            if process is not None:
-                process.terminate()
+        if process is not None:
+            process.terminate()
 
     def run(self):
-            self.pull_updates = subprocess.Popen(["git", "pull"])
-            self.pull_updates.wait()
+        self.pull_updates = subprocess.Popen(["git", "pull"])
+        self.pull_updates.wait()
 
-            _prepare_process(self.client_process)
-            _prepare_process(self.server_process)
+        _prepare_process(self.client_process)
+        _prepare_process(self.server_process)
 
-            self.client_process = subprocess.Popen(["cd", "bank-client", "&&", "yarn", "start"])
-            self.server_process = subprocess.Popen(["cd", "bank-server", "&&", "yarn", "start"])
+        self.client_process = subprocess.Popen(["cd", "bank-client", "&&", "yarn", "start"])
+        self.server_process = subprocess.Popen(["cd", "bank-server", "&&", "yarn", "start"])
 
+        self.client_process.wait()
+        self.server_process.wait()
 
 if __name__ == "__main__":
         daemon = Daemon(str(pathlib.Path().resolve())+'/tmp/daemon-example.pid')
