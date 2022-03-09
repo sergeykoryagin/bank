@@ -30,15 +30,15 @@ jobs:
         
     - name: Npm client ci
       run: npm ci
-        working-directory: ./bank-client
+      working-directory: ./bank-client
 
     - name: Npm client build
       run: npm run build --if-present
-        working-directory: ./bank-client
+      working-directory: ./bank-client
 
     - name: Npm client test
       run: npm test
-        working-directory: ./bank-client
+      working-directory: ./bank-client
 
     - name: Use Node.js ${{ matrix.node-version }} for server
       working-directory: ./bank-server
@@ -50,15 +50,15 @@ jobs:
 
     - name: Npm server ci
       run: npm ci
-        working-directory: ./bank-server
+      working-directory: ./bank-server
 
     - name: Npm server build
       run: npm run build --if-present
-        working-directory: ./bank-server
+      working-directory: ./bank-server
 
     - name: Npm server test
       run: npm test
-        working-directory: ./bank-server
+      working-directory: ./bank-server
     
     - name: Build and Push Docker Image
       uses: mr-smithers-excellent/docker-build-push@v4
