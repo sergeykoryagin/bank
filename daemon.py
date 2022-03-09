@@ -2,6 +2,7 @@ import sys, os, time, atexit
 from signal import SIGTERM
 import daemon
 import subprocess
+import pathlib
  
 class Daemon(object):
     """
@@ -227,7 +228,7 @@ class Daemon(object):
 
 
 if __name__ == "__main__":
-        daemon = Daemon('../tmp/daemon-example.pid')
+        daemon = Daemon(pathlib.Path().resolve()+'/tmp/daemon-example.pid')
         if len(sys.argv) == 2:
                 if 'start' == sys.argv[1]:
                         daemon.start()
