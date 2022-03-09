@@ -228,7 +228,7 @@ class Daemon(object):
 
 
 if __name__ == "__main__":
-        daemon = Daemon(pathlib.Path().resolve()+'/tmp/daemon-example.pid')
+        daemon = Daemon(str(pathlib.Path().resolve())+'/tmp/daemon-example.pid')
         if len(sys.argv) == 2:
                 if 'start' == sys.argv[1]:
                         daemon.start()
