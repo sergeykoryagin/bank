@@ -5,6 +5,7 @@ from signal import SIGTERM
 import daemon
 import subprocess
 import pathlib
+from threading import *
  
 class Daemon(object):
     """
@@ -222,7 +223,7 @@ class Daemon(object):
         self.pull_updates = subprocess.Popen(["git", "pull"])
         self.pull_updates.wait()
 
-        _prepare_process(self.client_process)
+        self._prepare_process(self.client_process)
         _prepare_process(self.server_process)
 
         self.client_process = subprocess.Popen(["cd", "bank-client", "&&", "yarn", "start"])
@@ -230,6 +231,7 @@ class Daemon(object):
 
         self.client_process.wait()
         self.server_process.wait()
+        print("end run!")
 
 if __name__ == "__main__":
         daemon = Daemon(str(pathlib.Path().resolve())+'/tmp/daemon-example.pid')
