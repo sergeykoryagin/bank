@@ -10,6 +10,7 @@
         opacity: 0.9
     
 .circle
+    position: relative
     width: 55px
     height: 55px
     border-radius: 100%
@@ -18,3 +19,9 @@
     
 .name, .money
     @include font-small-nickname
+    
+.tie
+    position: absolute
+    bottom: -5px
+    left: 50%
+    transform: translateX(-50%)

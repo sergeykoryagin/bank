@@ -1,6 +1,6 @@
-import { GameSettings } from 'src/interfaces/settings/game-settings';
+import { GameSettings } from 'interfaces/settings/game-settings';
 
-export const defaultSettings: GameSettings = {
+export const initialSettings: GameSettings = {
     startMoney: 16000,
     maxPlayers: 8,
     faceControl: false,
@@ -12,7 +12,6 @@ export const defaultSettings: GameSettings = {
     totalWriteOff: false,
     order: {
         hasOrder: false,
-        hasMoveSkipping: false,
         timer: {
             hasTimer: false,
             secondsToMove: 60,
@@ -20,7 +19,7 @@ export const defaultSettings: GameSettings = {
         credit: {
             hasCredits: false,
             movesCount: 1,
-            rate: 1,
+            rate: 100,
         },
     },
     bank: {
