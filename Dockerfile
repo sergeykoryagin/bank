@@ -14,9 +14,6 @@ WORKDIR /app
 # This will copy everything from the source path 
 # --more of a convenience when testing locally.
 COPY . .
-# update each dependency in package.json to the latest version
-RUN cd bank-client && npm install
-RUN cd bank-server && npm install
 # If you are building your code for production
 # RUN npm ci --only=production
 # Bundle app source
