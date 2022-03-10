@@ -18,14 +18,26 @@
     transform: translateX(-50%)
     
 .players
+    overflow-y: scroll
     flex-grow: 1
-    max-width: 280px
+    max-height: calc(100vh - 364px)
+    max-width: 500px
+    width: 100%
     display: grid
     grid-template-rows: 108px
-    grid-template-columns: 1fr 1fr 1fr
+    grid-template-columns: 55px 55px 55px
     justify-content: center
+    justify-items: center
     column-gap: 54px
     row-gap: 24px
+    margin-bottom: 24px
+    padding: 24px 0
     
 .player
     margin-bottom: 24px
+    
+.undoRedo
+    display: flex
+    justify-content: space-between
+    margin-bottom: 64px
+    width: 256px

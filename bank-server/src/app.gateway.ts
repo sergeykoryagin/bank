@@ -10,7 +10,6 @@ import {
 import { Server, Socket } from 'socket.io';
 import { GameOperation } from 'src/interfaces/operations/game-operation';
 import { User } from 'src/interfaces/user';
-import { defaultSettings } from 'src/utils/default-settings';
 import { AppService } from './app.service';
 
 @WebSocketGateway(80, {
@@ -36,7 +35,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     }
 
     @SubscribeMessage('createGame')
-    handleCreateGame(client: Socket, { hostname, settings = defaultSettings }) {
+    handleCreateGame(client: Socket, { hostname, settings }) {
         const host: User = {
             username: hostname,
             id: client.id,
@@ -83,5 +82,23 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
         const operationResult = this.service.doOperation(gameId, operation);
         this.server?.to(gameId).emit('operation', operationResult);
         this.logger.log(`Operation in game: ${gameId}, operation: ${operationResult.message}`);
+    }
+
+    @SubscribeMessage('undo')
+    handleUndo(client: Socket, gameId: string) {
+        const operationResult = this.service.undoOperation(gameId);
+        if (operationResult) {
+            this.server?.to(gameId).emit('operation', operationResult);
+            this.logger.log(`Operation in game: ${gameId}, operation: ${operationResult.message}`);
+        }
+    }
+
+    @SubscribeMessage('redo')
+    handleRedo(client: Socket, gameId: string) {
+        const operationResult = this.service.redoOperation(gameId);
+        if (operationResult) {
+            this.server?.to(gameId).emit('operation', operationResult);
+            this.logger.log(`Operation in game: ${gameId}, operation: ${operationResult.message}`);
+        }
     }
 }

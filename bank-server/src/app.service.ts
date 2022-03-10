@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { Game } from 'src/game/game';
 import { GameOperation } from 'src/interfaces/operations/game-operation';
 import { OperationResult } from 'src/interfaces/operations/operation-result';
+import { GameSettings } from 'src/interfaces/settings/game-settings';
 import { User } from 'src/interfaces/user';
 import { v4 } from 'uuid';
-import { GameSettings } from 'src/interfaces/settings/game-settings';
 
 @Injectable()
 export class AppService {
@@ -21,7 +21,7 @@ export class AppService {
         return game;
     }
 
-    startGame(gameId: string): void {
+    startGame(gameId: string) {
         this.getGame(gameId)?.startGame();
     }
 
@@ -38,16 +38,18 @@ export class AppService {
                 }
                 return { game, reconnectedPLayer: player, hostId };
             }
-            return {
-                game,
-                newPlayer: game.addPlayer(user),
-            };
+            if (game.players.length < game.settings.maxPlayers) {
+                return {
+                    game,
+                    newPlayer: game.addPlayer(user),
+                };
+            }
         }
     }
 
     doOperation(gameId: string, operation: GameOperation): OperationResult {
         const game = this.getGame(gameId);
-        const operationResult = game?.doOperation(operation);
+        const operationResult = game?.defaultOperation(operation);
         return (
             operationResult || {
                 success: false,
@@ -55,5 +57,15 @@ export class AppService {
                 type: operation.type,
             }
         );
+    }
+
+    undoOperation(gameId: string): OperationResult | void {
+        const game = this.getGame(gameId);
+        return game?.undoOperation();
+    }
+
+    redoOperation(gameId: string): OperationResult | void {
+        const game = this.getGame(gameId);
+        return game?.redoOperation();
     }
 }

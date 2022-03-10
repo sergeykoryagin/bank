@@ -4,13 +4,13 @@ import styles from 'components/UI/Input/index.module.sass';
 
 interface Props {
     className?: string;
-    value?: string;
+    value?: string | number;
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
     disabled?: boolean;
     hasError?: boolean;
     name?: string;
-    type?: 'number';
+    type?: 'number' | 'text';
     autoFocus?: boolean;
 }
 
