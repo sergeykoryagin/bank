@@ -85,6 +85,6 @@ jobs:
         script: |
           docker stop gamebank
           docker rmi $(docker images | grep 'gamebank')
-          docker pull gamebank/releases:${{ steps.vars.outputs.branch }}-${{ steps.vars.outputs.sha_short }}
-          docker run --name gamebank --rm -d  -p 3000:3000/tcp gamebank/releases:${{ steps.vars.outputs.branch }}-${{ steps.vars.outputs.sha_short }}
+          docker pull gamebank/releases:"${{ steps.vars.outputs.branch }}-${{ steps.vars.outputs.sha_short }}"
+          docker run --name gamebank --rm -d  -p 3000:3000/tcp gamebank/releases:"${{ steps.vars.outputs.branch }}-${{ steps.vars.outputs.sha_short }}"
           ./run_gamebank.sh
