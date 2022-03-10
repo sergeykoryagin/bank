@@ -71,6 +71,7 @@ jobs:
       uses: mr-smithers-excellent/docker-build-push@v4
       with:
         image: gamebank/releases
+        tags: latest
         registry: docker.io
         username: gamebank
         password: 2001vasia
