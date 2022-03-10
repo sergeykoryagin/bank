@@ -75,17 +75,17 @@ jobs:
         registry: docker.io
         username: gamebank
         password: 2001vasia
-
-    - name: deploy on server
-      uses: appleboy/ssh-action@master
-      with:
-        host: 80.78.253.61
-        username: root
-        password: +=4YbY!-TimC
-        port: 22
-        script: |
-          docker stop gamebank
-          docker rmi $(docker images | grep 'gamebank')
-          docker pull gamebank/releases
-          docker run --name gamebank --rm -d  -p 3000:3000/tcp gamebank/releases
-          ./run_gamebank.sh
+#
+#    - name: deploy on server
+#      uses: appleboy/ssh-action@master
+#      with:
+#        host: 80.78.253.61
+#        username: root
+#        password: +=4YbY!-TimC
+#        port: 22
+#        script: |
+#          docker stop gamebank
+#          docker rmi $(docker images | grep 'gamebank')
+#          docker pull gamebank/releases
+#          docker run --name gamebank --rm -d  -p 3000:3000/tcp gamebank/releases
+#          ./run_gamebank.sh
