@@ -83,6 +83,7 @@ jobs:
         password: +=4YbY!-TimC
         port: 22
         script: |
+          source ~/.bashrc
           docker stop gamebank
           docker rmi $(docker images | grep 'gamebank')
           docker pull gamebank/releases:${{ steps.vars.outputs.branch }}-${{ steps.vars.outputs.sha_short }}
