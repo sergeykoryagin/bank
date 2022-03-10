@@ -27,11 +27,11 @@ jobs:
         echo "//npm.pkg.github.com/:_authToken=\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" >> .npmrc
         echo "always-auth: true" >> .npmrc
 
-    - name: Client npm install
-      run: npm install
-      working-directory: ./bank-client
-
 #     TODO: update after fix
+#    - name: Client npm install
+#      run: npm install
+#      working-directory: ./bank-client
+#
 #    - name: Client npm ci
 #      run: npm ci
 #      working-directory: ./bank-client
@@ -50,11 +50,11 @@ jobs:
         echo "//npm.pkg.github.com/:_authToken=\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" >> .npmrc
         echo "always-auth: true" >> .npmrc
 
-    - name: Server npm install
-      run: npm install
-      working-directory: ./bank-server
-      
 #     TODO: update after fix
+#    - name: Server npm install
+#      run: npm install
+#      working-directory: ./bank-server
+#      
 #    - name: Server npm ci
 #      run: npm ci
 #      working-directory: ./bank-server
@@ -74,3 +74,17 @@ jobs:
         registry: docker.io
         username: gamebank
         password: 2001vasia
+
+    - name: deploy on server
+      uses: appleboy/ssh-action@master
+      with:
+        host: 80.78.253.61
+        username: root
+        key: ${{ secrets.SECRET_KEY }}
+        port: 22
+        script: |
+          docker stop gamebank
+          docker rmi $(docker images | grep 'gamebank')
+          docker pull gamebank/releases:${{ steps.vars.outputs.branch }}-${{ steps.vars.outputs.sha_short }}
+          docker run --name gamebank --rm -d  -p 3000:3000/tcp gamebank/releases:${{ steps.vars.outputs.branch }}-${{ steps.vars.outputs.sha_short }}
+          ./run_gamebank.sh
