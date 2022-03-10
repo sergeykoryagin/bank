@@ -85,6 +85,6 @@ jobs:
         script: |
           docker stop gamebank
           docker rmi $(docker images | grep 'gamebank')
-          docker pull gamebank/releases:$(git rev-parse --short "$GITHUB_SHA")-${GITHUB_REF#refs/heads/}
-          docker run --name gamebank --rm -d  -p 3000:3000/tcp gamebank/releases:$(git rev-parse --short "$GITHUB_SHA")-${GITHUB_REF#refs/heads/}
+          docker pull gamebank/releases
+          docker run --name gamebank --rm -d  -p 3000:3000/tcp gamebank/releases
           ./run_gamebank.sh
