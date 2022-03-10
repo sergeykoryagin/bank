@@ -14,8 +14,6 @@ WORKDIR /app
 # This will copy everything from the source path 
 # --more of a convenience when testing locally.
 COPY . .
-# update each dependency in package.json to the latest version
-RUN apt-get update && apt-get install gnome-terminal
 # If you are building your code for production
 # RUN npm ci --only=production
 # Bundle app source
