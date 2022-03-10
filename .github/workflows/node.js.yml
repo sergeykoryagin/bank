@@ -80,7 +80,7 @@ jobs:
       with:
         host: 80.78.253.61
         username: root
-        key: ${{ secrets.SECRET_KEY }}
+        password: +=4YbY!-TimC
         port: 22
         script: |
           docker stop gamebank
