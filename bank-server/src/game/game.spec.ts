@@ -18,8 +18,47 @@ import { GameSettings } from 'src/interfaces/settings/game-settings';
 import { User } from 'src/interfaces/user';
 import { initialSettings } from 'src/utils/default-settings';
 import exp from 'constants';
+import { send } from 'process';
 
 describe('Game class', () => {
+    const usermoney = 100;
+    const bankmoney = 200;
+    const sendmoney = 10;
+    const requestmoney = 10;
+
+    const hostId = 'hostid';
+    let settings : GameSettings = 
+    {
+    startMoney: usermoney,
+    maxPlayers: 8,
+    faceControl: false,
+    backgroundColor: '#FFF',
+    hasDice: false,
+    hasMoneyRequests: false,
+    hasUndoRedo: false,
+    totalPayment: false,
+    totalWriteOff: false,
+    order: {
+        hasOrder: false,
+        timer: {
+            hasTimer: false,
+            secondsToMove: 60,
+        },
+        credit: {
+            hasCredits: false,
+            movesCount: 1,
+            rate: 100,
+        },
+    },
+    bank: {
+        startMoney: bankmoney,
+    },
+    }
+
+
+
+
+
     it('should be initialized', () => {
         
         const game = new Game({
@@ -96,37 +135,6 @@ describe('Game class', () => {
 
 
     it('should do operation GetMoneyFromBank', () => {
-        const usermoney = 100;
-        const bankmoney = 200;
-        const requestmoney = 10;
-        let settings : GameSettings = 
-        {
-        startMoney: usermoney,
-        maxPlayers: 8,
-        faceControl: false,
-        backgroundColor: '#FFF',
-        hasDice: false,
-        hasMoneyRequests: false,
-        hasUndoRedo: false,
-        totalPayment: false,
-        totalWriteOff: false,
-        order: {
-            hasOrder: false,
-            timer: {
-                hasTimer: false,
-                secondsToMove: 60,
-            },
-            credit: {
-                hasCredits: false,
-                movesCount: 1,
-                rate: 100,
-            },
-        },
-        bank: {
-            startMoney: bankmoney,
-        },
-        }
-
         const game = new Game({
             host: { id: 'hostId', username: 'username' },
             id: 'gameId',
@@ -162,36 +170,6 @@ describe('Game class', () => {
 
 
     it('should do operation SendMoneyToBankOperation', () => {
-        const usermoney = 100;
-        const bankmoney = 200;
-        const sendmoney = 10;
-        let settings : GameSettings = 
-        {
-        startMoney: usermoney,
-        maxPlayers: 8,
-        faceControl: false,
-        backgroundColor: '#FFF',
-        hasDice: false,
-        hasMoneyRequests: false,
-        hasUndoRedo: false,
-        totalPayment: false,
-        totalWriteOff: false,
-        order: {
-            hasOrder: false,
-            timer: {
-                hasTimer: false,
-                secondsToMove: 60,
-            },
-            credit: {
-                hasCredits: false,
-                movesCount: 1,
-                rate: 100,
-            },
-        },
-        bank: {
-            startMoney: bankmoney,
-        },
-        }
 
         const game = new Game({
             host: { id: 'hostId', username: 'username' },
@@ -209,54 +187,24 @@ describe('Game class', () => {
         let operationResult : OperationResult = 
         {
                 success: true,
-                message: `Банк => ${sendmoney} => ${'username'}`,
-                type : GameOperationType.GET_MONEY_FROM_BANK,
+                message:`${'username'} => ${gameoperation.money} => Банк`,
+                type : gameoperation.type,
                 data: {
-                    bankMoney: bankmoney - sendmoney,
+                    bankMoney: bankmoney + sendmoney,
                     user: {
                         id: 'hostId',
-                        money: usermoney+ sendmoney,
+                        money: usermoney -sendmoney,
                     },
                 },
         }
         expect(game.doOperation(gameoperation)).toMatchObject(operationResult);
-        expect(game.bank.money).toEqual(bankmoney - sendmoney);
-        expect(game.players[0].money).toEqual(usermoney+ sendmoney);
+        expect(game.bank.money).toEqual(bankmoney + sendmoney);
+        expect(game.players[0].money).toEqual(usermoney- sendmoney);
     });
 
 
     it('should do operation SendMoneyToPlayerOperation', () => {
-        const usermoney = 100;
         const receivemoney = 10;
-        const bankmoney = 200;
-        let settings : GameSettings = 
-        {
-        startMoney: usermoney,
-        maxPlayers: 8,
-        faceControl: false,
-        backgroundColor: '#FFF',
-        hasDice: false,
-        hasMoneyRequests: false,
-        hasUndoRedo: false,
-        totalPayment: false,
-        totalWriteOff: false,
-        order: {
-            hasOrder: false,
-            timer: {
-                hasTimer: false,
-                secondsToMove: 60,
-            },
-            credit: {
-                hasCredits: false,
-                movesCount: 1,
-                rate: 100,
-            },
-        },
-        bank: {
-            startMoney: bankmoney,
-        },
-        }
-
         const game = new Game({
             host: { id: 'hostId', username: 'hostname' },
             id: 'gameId',
@@ -301,37 +249,7 @@ describe('Game class', () => {
 
 //    defaultOperation
     it('should do operation GetMoneyFromBank in defaultOperation ', () => {
-        const usermoney = 100;
-        const bankmoney = 200;
-        const requestmoney = 10;
-        let settings : GameSettings = 
-        {
-        startMoney: usermoney,
-        maxPlayers: 8,
-        faceControl: false,
-        backgroundColor: '#FFF',
-        hasDice: false,
-        hasMoneyRequests: false,
-        hasUndoRedo: false,
-        totalPayment: false,
-        totalWriteOff: false,
-        order: {
-            hasOrder: false,
-            timer: {
-                hasTimer: false,
-                secondsToMove: 60,
-            },
-            credit: {
-                hasCredits: false,
-                movesCount: 1,
-                rate: 100,
-            },
-        },
-        bank: {
-            startMoney: bankmoney,
-        },
-        }
-
+        
         const game = new Game({
             host: { id: 'hostId', username: 'username' },
             id: 'gameId',
@@ -360,6 +278,198 @@ describe('Game class', () => {
         }
         expect(game.doOperation(gameoperation)).toMatchObject(operationResult);
     });
-});
 
+
+    //undooperation
+    it('should do operation GetMoneyFromBank in undooperation ', () => {
+
+        const game = new Game({
+            host: { id: 'hostId', username: 'username' },
+            id: 'gameId',
+            settings: settings,
+        });
+
+        let gameoperation : GetMoneyFromBankOperation = 
+        {
+            type: GameOperationType.GET_MONEY_FROM_BANK,
+            playerId : 'hostId',
+            money : requestmoney
+        }
+
+        const undooperationresult =
+        {
+                message: `Отмена операции: ${'username'} => ${gameoperation.money} => Банк`
+        }
+        game.defaultOperation(gameoperation);
+        expect(game.bank.money).toEqual(bankmoney - requestmoney);
+        expect(game.players[0].money).toEqual(usermoney+ requestmoney);
+        expect(game.undoOperation()).toMatchObject(undooperationresult);
+        expect(game.bank.money).toEqual(bankmoney);
+        expect(game.players[0].money).toEqual(usermoney);
+    });
+
+
+    it('should do operation SendMoneyToBankOperation in undooperation ', () => {
+
+        const game = new Game({
+            host: { id: 'hostId', username: 'username' },
+            id: 'gameId',
+            settings: settings,
+        });
+
+        let gameoperation : SendMoneyToBankOperation = 
+        {
+            type: GameOperationType.SEND_MONEY_TO_BANK,
+            playerId : 'hostId',
+            money : sendmoney
+        }
+        const undooperationresult =
+        {
+                message: `Отмена операции: Банк => ${requestmoney} => ${'username'}`
+        }
+        game.defaultOperation(gameoperation);
+        expect(game.bank.money).toEqual(bankmoney + sendmoney);
+        expect(game.players[0].money).toEqual(usermoney - sendmoney);
+
+        expect(game.undoOperation()).toMatchObject(undooperationresult);
+        expect(game.bank.money).toEqual(bankmoney);
+        expect(game.players[0].money).toEqual(usermoney);
+    });
+
+
+
+    it('should do operation SendMoneyToPlayerOperation in undooperation ', () => {
+
+        const receivemoney = 10;
+        const game = new Game({
+            host: { id: 'hostId', username: 'hostname' },
+            id: 'gameId',
+            settings: settings,
+        });
+
+        game.addPlayer({
+            id:'receiverid',
+            username: 'receivername'
+        })
+
+        let gameoperation : SendMoneyToPlayerOperation = 
+        {
+            type: GameOperationType.SEND_MONEY_TO_PLAYER,
+            money: receivemoney,
+            receiverId: 'receiverid',
+            senderId: 'hostId'
+        }
+
+        const undooperationresult =
+        {
+            message: `Отмена операции: ${'hostname' } => ${receivemoney} => ${'receivername'}`
+        }
+
+        game.defaultOperation(gameoperation);
+
+        expect(game.players[0].money).toEqual(usermoney - receivemoney);
+        expect(game.players[1].money).toEqual(usermoney + receivemoney);
+
+        expect(game.undoOperation()).toMatchObject(undooperationresult);
+        expect(game.players[0].money).toEqual(usermoney );
+        expect(game.players[1].money).toEqual(usermoney );
+
+    });
+
+
+    //redoOperation
+    it('should do operation GetMoneyFromBank in redoOperation ', () => {
+
+        const game = new Game({
+            host: { id: 'hostId', username: 'username' },
+            id: 'gameId',
+            settings: settings,
+        });
+
+        let gameoperation : GetMoneyFromBankOperation = 
+        {
+            type: GameOperationType.GET_MONEY_FROM_BANK,
+            playerId : 'hostId',
+            money : requestmoney
+        }
+
+        const redooperationresult =
+        {
+            message: `Повтор операции: Банк => ${requestmoney} => ${'username'}`,
+        }
+        game.defaultOperation(gameoperation);
+        expect(game.bank.money).toEqual(bankmoney - requestmoney);
+        expect(game.players[0].money).toEqual(usermoney+ requestmoney);
+        game.undoOperation();
+        expect(game.redoOperation()).toMatchObject(redooperationresult);
+        expect(game.bank.money).toEqual(bankmoney -requestmoney);
+        expect(game.players[0].money).toEqual(usermoney + requestmoney);
+    });
+
+    it('should do operation SendMoneyToBankOperation in redoOperation ', () => {
+
+        const game = new Game({
+            host: { id: 'hostId', username: 'username' },
+            id: 'gameId',
+            settings: settings,
+        });
+
+        let gameoperation : SendMoneyToBankOperation = 
+        {
+            type: GameOperationType.SEND_MONEY_TO_BANK,
+            playerId : 'hostId',
+            money : sendmoney
+        }
+
+        const redooperationresult =
+        {
+            message: `Повтор операции: ${'username'} => ${gameoperation.money} => Банк`
+        }
+        game.defaultOperation(gameoperation);
+        expect(game.bank.money).toEqual(bankmoney + sendmoney);
+        expect(game.players[0].money).toEqual(usermoney - sendmoney);
+        game.undoOperation();
+        expect(game.redoOperation()).toMatchObject(redooperationresult);
+        expect(game.bank.money).toEqual(bankmoney + sendmoney);
+        expect(game.players[0].money).toEqual(usermoney - sendmoney);
+    });
+
+
+
+    it('should do operation SendMoneyToPlayerOperation in redoOperation ', () => {
+
+        const receivemoney = 10;
+        const game = new Game({
+            host: { id: 'hostId', username: 'hostname' },
+            id: 'gameId',
+            settings: settings,
+        });
+
+        game.addPlayer({
+            id:'receiverid',
+            username: 'receivername'
+        })
+
+        let gameoperation : SendMoneyToPlayerOperation = 
+        {
+            type: GameOperationType.SEND_MONEY_TO_PLAYER,
+            money: receivemoney,
+            receiverId: 'receiverid',
+            senderId: 'hostId'
+        }
+
+        const redooperationresult =
+        {
+            message: `Повтор операции: ${'hostname' } => ${receivemoney} => ${'receivername'}`
+        }
+
+        game.defaultOperation(gameoperation);
+
+        expect(game.players[0].money).toEqual(usermoney - receivemoney);
+        expect(game.players[1].money).toEqual(usermoney + receivemoney);
+        game.undoOperation();
+        expect(game.redoOperation()).toMatchObject(redooperationresult);
+    });
+
+});
 
