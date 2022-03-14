@@ -1,7 +1,7 @@
 import { createContext, FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
-import { setupSocketListeners } from 'utils/setupSocketListeners';
+import { setupSocketListeners } from 'utils/setup-socket-listeners';
 
 export const SocketContext = createContext<Socket | null>(null);
 

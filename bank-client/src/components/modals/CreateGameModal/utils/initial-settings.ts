@@ -1,9 +1,7 @@
-
-import { GameSettings } from 'src/interfaces/settings/game-settings';
-
+import { GameSettings } from 'interfaces/settings/game-settings';
 
 export const initialSettings: GameSettings = {
-    startMoney: 1000,
+    startMoney: 16000,
     maxPlayers: 8,
     faceControl: false,
     backgroundColor: '#FFF',
@@ -25,7 +23,6 @@ export const initialSettings: GameSettings = {
         },
     },
     bank: {
-        //startMoney: Number.MAX_SAFE_INTEGER,
-        startMoney: 10000,
+        startMoney: Number.MAX_SAFE_INTEGER,
     },
 };

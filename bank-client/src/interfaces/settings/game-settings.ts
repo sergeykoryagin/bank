@@ -3,9 +3,9 @@ import { OrderSettings } from 'interfaces/settings/order-settings';
 
 export interface GameSettings {
     startMoney: number;
-    maxPLayers: number;
+    maxPlayers: number;
     faceControl: boolean;
-    backGroundColor: string;
+    backgroundColor: string;
     hasDice: boolean;
     totalWriteOff: boolean;
     totalPayment: boolean;

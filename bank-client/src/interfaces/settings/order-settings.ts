@@ -3,7 +3,6 @@ import { TimerSettings } from 'interfaces/settings/timer-settings';
 
 export interface OrderSettings {
     hasOrder: boolean;
-    hasMoveSkipping: boolean;
     timer: TimerSettings;
     credit: CreditSettings;
 }
