@@ -26,19 +26,19 @@ jobs:
         echo "always-auth: true" >> .npmrc
 
     - name: Client npm install
-      run: npm install
+      run: yarn install
       working-directory: ./bank-client
 
     - name: Client npm ci
-      run: npm ci
+      run: yarn ci
       working-directory: ./bank-client
 
 #    - name: Client npm build
-#      run: npm run build --if-present
+#      run: npm yarn build --if-present
 #      working-directory: ./bank-client#
 
     - name: Client npm  test
-      run: npm test
+      run: yarn test
       working-directory: ./bank-client
 
     - name: Configure NPM server
@@ -48,20 +48,20 @@ jobs:
         echo "always-auth: true" >> .npmrc
 
     - name: Server npm install
-      run: npm install
+      run: yarn install
       working-directory: ./bank-server
       
     - name: Server npm ci
-      run: npm ci
+      run: yarn ci
       working-directory: ./bank-server
 
 # TODO: fix compile errors
-#    - name: Server npm build
+#    - name: Server yarn build
 #      run: npm run build --if-present
 #      working-directory: ./bank-server
 
     - name: Server npm test
-      run: npm test
+      run: yarn test
       working-directory: ./bank-server
     
     - name: Build and Push Docker Image
