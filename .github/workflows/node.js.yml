@@ -6,8 +6,6 @@ name: Node.js CI
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   build:
@@ -16,24 +14,75 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+    - name: Configure NPM client
+      working-directory: ./bank-client
+      run: |
+        echo "//npm.pkg.github.com/:_authToken=\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" >> .npmrc
+        echo "always-auth: true" >> .npmrc
+
+    - name: Client npm install
+      run: npm install
+      working-directory: ./bank-client
+
+    - name: Client npm ci
+      run: npm ci
+      working-directory: ./bank-client
+
+    - name: Client npm build
+      run: npm run build --if-present
+      working-directory: ./bank-client
+
+    - name: Client npm  test
+      run: npm test
+      working-directory: ./bank-client
+
+    - name: Configure NPM server
+      working-directory: ./bank-server
+      run: |
+        echo "//npm.pkg.github.com/:_authToken=\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" >> .npmrc
+        echo "always-auth: true" >> .npmrc
+
+    - name: Server npm install
+      run: npm install
+      working-directory: ./bank-server
+      
+    - name: Server npm ci
+      run: npm ci
+      working-directory: ./bank-server
+
+    - name: Server npm build
+      run: npm run build --if-present
+      working-directory: ./bank-server
+
+    - name: Server npm test
+      run: npm test
+      working-directory: ./bank-server
     
     - name: Build and Push Docker Image
       uses: mr-smithers-excellent/docker-build-push@v4
       with:
         image: gamebank/releases
+        tags: latest
         registry: docker.io
         username: gamebank
         password: 2001vasia
+#
+#    - name: deploy on server
+#      uses: appleboy/ssh-action@master
+#      with:
+#        host: 80.78.253.61
+#        username: root
+#        password: +=4YbY!-TimC
+#        port: 22
+#        script: |
+#          docker container stop gamebank
+#          docker container rm gamebank
+#          docker rmi $(docker images | grep 'gamebank')
+#          docker pull gamebank/releases:tag
+#          docker run --name gamebank -d  -p 3000:3000/tcp gamebank/releases:tag
+#          ./run_gamebank.sh
