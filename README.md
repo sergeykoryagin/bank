@@ -42,6 +42,9 @@ write in console
     yarn install
     yarn start
 
+##Licence
+Project licenced under GPLv3. Holders: Bikbulatov Timur Khabdrashitovich, Koryagin Sergey Evgenievich, Lapinky Vasiliy Alexandravich, Fattahova Ilsiar Farhatovna, Vasiliev Anton Nikolaevich
+
 ##Credits
 On project work
 * [Fattahova Ilsiar Farhatovna](https://github.com/Lsr248)
