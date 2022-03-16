@@ -38,7 +38,7 @@ jobs:
 #      working-directory: ./bank-client#
 
     - name: Client yarn  test
-      run: yarn test
+      run: yarn test --passWithNoTests
       working-directory: ./bank-client
 
     - name: Configure NPM server
@@ -61,7 +61,7 @@ jobs:
 #      working-directory: ./bank-server
 
     - name: Server yarn test
-      run: yarn test
+      run: yarn test --passWithNoTests
       working-directory: ./bank-server
     
     - name: Build and Push Docker Image
