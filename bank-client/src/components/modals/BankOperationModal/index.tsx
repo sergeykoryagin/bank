@@ -55,8 +55,13 @@ export const BankOperationModal: VFC = () => {
     };
 
     const handleMoneyChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setMoney(event.target.value);
-        setError('');
+        const money = parseInt(event.target.value);
+        if (money <= 0) {
+            setMoney('1');
+        } else {
+            setMoney(event.target.value);
+            setError('');
+        }
     };
 
     return (

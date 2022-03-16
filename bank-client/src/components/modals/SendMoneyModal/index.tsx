@@ -44,6 +44,8 @@ export const SendMoneyModal: VFC<Props> = ({ player }: Props) => {
         const money = event.target.value;
         if (+money > Number(myPlayer?.money)) {
             setError('У вас нет столько денег!');
+        } else if (+money <= 0) {
+            setMoney('1');
         } else {
             setError('');
         }
