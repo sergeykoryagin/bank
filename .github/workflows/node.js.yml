@@ -25,20 +25,20 @@ jobs:
         echo "//npm.pkg.github.com/:_authToken=\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" >> .npmrc
         echo "always-auth: true" >> .npmrc
 
-    - name: Client npm install
+    - name: Client yarn install
       run: yarn install
       working-directory: ./bank-client
 
-    - name: Client npm ci
-      run: yarn ci
-      working-directory: ./bank-client
+#    - name: Client yarn ci
+#      run: yarn ci
+#      working-directory: ./bank-client
 
-#    - name: Client npm build
+#    - name: Client yarn build
 #      run: npm yarn build --if-present
 #      working-directory: ./bank-client#
 
-    - name: Client npm  test
-      run: yarn test
+    - name: Client yarn  test
+      run: yarn test --passWithNoTests
       working-directory: ./bank-client
 
     - name: Configure NPM server
@@ -47,21 +47,21 @@ jobs:
         echo "//npm.pkg.github.com/:_authToken=\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" >> .npmrc
         echo "always-auth: true" >> .npmrc
 
-    - name: Server npm install
+    - name: Server yarn install
       run: yarn install
       working-directory: ./bank-server
       
-    - name: Server npm ci
-      run: yarn ci
-      working-directory: ./bank-server
+#    - name: Server yarn ci
+#      run: yarn ci
+#      working-directory: ./bank-server
 
 # TODO: fix compile errors
 #    - name: Server yarn build
 #      run: npm run build --if-present
 #      working-directory: ./bank-server
 
-    - name: Server npm test
-      run: yarn test
+    - name: Server yarn test
+      run: yarn test --passWithNoTests
       working-directory: ./bank-server
     
     - name: Build and Push Docker Image
