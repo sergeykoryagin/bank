@@ -12,7 +12,7 @@ import { GameOperation } from 'src/interfaces/operations/game-operation';
 import { User } from 'src/interfaces/user';
 import { AppService } from './app.service';
 
-@WebSocketGateway(80, {
+@WebSocketGateway(Number(`${process.env.APP_GATEWAY_PORT}`), {
     cors: true,
     transports: ['websocket'],
 })
@@ -23,7 +23,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     private service: AppService = new AppService();
 
     afterInit(): void {
-        this.logger.log(`AppGateway initialized on port 80`);
+        this.logger.log(`AppGateway initialized on port ` + `${process.env.APP_GATEWAY_PORT}`);
     }
 
     handleConnection(client: Socket): void {
