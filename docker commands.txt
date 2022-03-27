@@ -1,0 +1,19 @@
+# останавливаем старый контейнер
+docker container stop gamebank
+# удаляем старый контейнер
+docker container rm gamebank
+# удаляем старый образ
+docker rmi $(docker images | grep 'gamebank')
+
+# скачиваем новый образ
+docker pull gamebank/releases:master-f8be540 # нужно измеенить на свой тэг
+# запускаем новый образ
+docker run --name gamebank -d -t -p 3000:3000 -p 8080:8080 -p 3001:3001 gamebank/releases:master-f8be540 # нужно измеенить на свой тэг
+
+# загружаем зависимости
+docker exec -t -d /gamebank bash -c "cd bank-client && npm install && npm install pm2 -g"
+docker exec -t -d /gamebank bash -c "cd bank-server && npm install"
+
+# запускаем приложение
+docker exec -t -d /gamebank bash -c "cd bank-client && pm2 start yarn --interpreter bash --name api -- start"
+docker exec -t -d /gamebank bash -c "cd bank-server && yarn start"
