@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BackButton component should renders correctly 1`] = `
+<div>
+  <button
+    class="backButton"
+  >
+    <svg
+      class="backIcon"
+    >
+      arrow-back.svg
+    </svg>
+  </button>
+</div>
+`;

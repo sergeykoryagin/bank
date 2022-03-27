@@ -53,7 +53,7 @@ export const Game: VFC = () => {
     return (
         <div className={styles.game}>
             <div className={styles.topWrapper}>
-                <BackButton className={styles.backButton} to='/menu' />
+                <BackButton className={styles.backButton} href='/menu' />
                 {game?.bank && <BankComponent bank={game.bank} className={styles.bank} />}
             </div>
             <ul className={styles.players}>

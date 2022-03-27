@@ -6,12 +6,12 @@ import { useNavigate } from 'react-router-dom';
 
 interface Props {
     className?: string;
-    to: string;
+    href: string;
 }
 
-export const BackButton: VFC<Props> = ({ className, to }: Props) => {
+export const BackButton: VFC<Props> = ({ className, href }: Props) => {
     const navigate = useNavigate();
-    const handleBackClick = () => navigate(to);
+    const handleBackClick = () => navigate(href);
     return (
         <button className={cn(styles.backButton, className)} onClick={handleBackClick}>
             <ArrowBack className={styles.backIcon} />
