@@ -1,6 +1,8 @@
 import { initialSettings } from 'components/modals/CreateGameModal/utils/initial-settings';
+import { ColorPicker } from 'components/UI/ColorPicker';
 import { Input } from 'components/UI/Input';
 import { Switch } from 'components/UI/Switch';
+import { backgroundColors } from 'constants/background-colors';
 import { useFormik } from 'formik';
 import { GameSettings } from 'interfaces/settings/game-settings';
 import { useCallback, VFC } from 'react';
@@ -24,10 +26,14 @@ export const CreateGameModal: VFC = () => {
         [username, socket],
     );
 
-    const { handleSubmit, values, handleChange } = useFormik<GameSettings>({
+    const { handleSubmit, values, handleChange, setFieldValue } = useFormik<GameSettings>({
         initialValues: initialSettings,
         onSubmit,
     });
+
+    const handleColorChange = (color: string) => {
+        setFieldValue('backgroundColor', color);
+    };
 
     return (
         <Modal className={styles.modal}>
@@ -95,6 +101,16 @@ export const CreateGameModal: VFC = () => {
                             className={styles.input}
                         />
                         <div>Возврат хода</div>
+                    </label>
+                    <label className={styles.field}>
+                        <ColorPicker
+                            name='backgroundColor'
+                            defaultColor='#D1D9E6'
+                            colors={backgroundColors}
+                            className={styles.input}
+                            onChange={handleColorChange}
+                        />
+                        <div>Цвет фона</div>
                     </label>
                     {/* TODO: Создать задачку для реализации запроса денег у другого игрока */}
                     {/*<label className={styles.field}>*/}
