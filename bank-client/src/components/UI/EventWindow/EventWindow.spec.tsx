@@ -48,11 +48,5 @@ describe('Input component', () => {
         const lenafterclick = TestApp.length;
         expect(lenafterclick).equals(len+1);
 
-
-        /*screen.debug();
-        fireEvent.click(button);
-        screen.debug();
-        fireEvent.click(button);
-        screen.debug();*/
     });
 });
