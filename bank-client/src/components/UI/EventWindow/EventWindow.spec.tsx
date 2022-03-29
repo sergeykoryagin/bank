@@ -41,7 +41,7 @@ describe('Input component', () => {
         const len = TestApp.length;
 
         const button = screen.getByRole('button');
-        screen.debug();
+        //screen.debug();
 
 
         fireEvent.click(button);
