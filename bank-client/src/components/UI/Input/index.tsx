@@ -1,6 +1,7 @@
 import { ChangeEvent, VFC } from 'react';
 import cn from 'classnames';
 import styles from 'components/UI/Input/index.module.sass';
+import InputMask from 'react-input-mask';
 
 interface Props {
     className?: string;
@@ -12,6 +13,7 @@ interface Props {
     name?: string;
     type?: 'number' | 'text';
     autoFocus?: boolean;
+    mask?: string;
 }
 
 export const Input: VFC<Props> = ({
@@ -22,11 +24,13 @@ export const Input: VFC<Props> = ({
     disabled,
     hasError,
     name,
-    type,
     autoFocus,
+    mask,
 }: Props) => {
     return (
-        <input
+        <InputMask
+            alwaysShowMask={false}
+            mask={mask || ''}
             className={cn(styles.input, className, {
                 [styles.inputError]: hasError,
             })}
@@ -35,7 +39,6 @@ export const Input: VFC<Props> = ({
             placeholder={placeholder}
             disabled={disabled}
             name={name}
-            type={type}
             autoFocus={autoFocus}
         />
     );

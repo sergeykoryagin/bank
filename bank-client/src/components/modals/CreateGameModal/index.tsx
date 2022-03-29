@@ -40,7 +40,6 @@ export const CreateGameModal: VFC = () => {
                             value={values.startMoney}
                             placeholder='Деньги'
                             onChange={handleChange}
-                            type='number'
                             className={styles.input}
                         />
                         <div>Стартовые деньги</div>
@@ -51,7 +50,6 @@ export const CreateGameModal: VFC = () => {
                             value={values.bank.startMoney}
                             placeholder='Банк'
                             onChange={handleChange}
-                            type='number'
                             className={styles.input}
                         />
                         <div>Стартовые деньги в банке</div>
@@ -62,7 +60,6 @@ export const CreateGameModal: VFC = () => {
                             value={values.maxPlayers}
                             placeholder='Игроки'
                             onChange={handleChange}
-                            type='number'
                             className={styles.input}
                         />
                         <div>Максимальное число игроков</div>
