@@ -1,50 +1,43 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { ReactElement, useEffect } from 'react';
-import { Switch, Props } from 'components/UI/Switch/index';
-import { useModal } from 'hooks/useModal';
-import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil';
-import { eventsAtom } from 'store/events-atom';
-import { ModalConstructor } from 'components/modals/modal/ModalConstructor';
+import { Switch } from 'components/UI/Switch/index';
 
-
-const testplacechecked = true;
 describe('Switch component', () => {
     it('should render correctly', () => {
         render(<Switch />);
         expect(screen.getByRole('checkbox')).toBeInTheDocument();
     });
 
+    it('should renders checked', () => {
+        render(<Switch checked={true} onChange={() => void 0} />);
+        const switchElement = screen.getByRole('checkbox');
+        expect(switchElement).toBeChecked();
+    });
 
-    /*it('should renders checked', () => {
-        render(<Switch  checked={true} />);
-        const input = screen.getByRole('textbox');
-        expect(input.getAttribute('placeholder')).toBe('test placeholder');
-    });*/
+    it('should renders className', () => {
+        render(<Switch className='testClassName' />);
+        const switchElement = screen.getByRole('checkbox');
+        expect(switchElement.parentElement?.classList.contains('testClassName')).toBe(true);
+    });
 
+    it('should renders disabled', () => {
+        render(<Switch disabled={true} />);
+        const switchElement = screen.getByRole('checkbox');
+        expect(switchElement).toBeDisabled();
+    });
 
-    /*it('should renders className', () => {
-        render(<Switch className ='testclassname' />);
-        const input = screen.getByRole('checkbox');
-        expect(input.getAttribute('className')).toBe('testclassname');
-    });*/
+    it('should renders name', () => {
+        render(<Switch name='testname' />);
+        const switchElement = screen.getByRole('checkbox');
+        expect(switchElement.getAttribute('name')).toBe('testname');
+    });
 
-    /*it('should renders disabled', () => {
-        render(<Switch disabled = {true} />);
-        const input = screen.getByRole('textbox');
-       expect(document.activeElement).toBe(input);
-    });*/
+    it('should renders with onChange', () => {
+        const handleChange = jest.fn();
+        render(<Switch name='test name' onChange={handleChange} />);
+        const switchElement = screen.getByRole('checkbox');
 
-    /*it('should renders name', () => {
-        render(<Switch name ='testname' />);
-        const input = screen.getByRole('checkbox');
-        expect(document.activeElement).toBe(input);
-    });*/
+        fireEvent.click(switchElement);
 
-    
-    
-    /*it('should renders with onChange', () => {
-        render(<Switch name='test name' onChange={() => void 0} />);
-        const switc : HTMLInputElement = screen.getByRole('checkbox');
-        expect(switc.name).toBe('test name');
-    });*/
+        expect(handleChange).toBeCalled();
+    });
 });

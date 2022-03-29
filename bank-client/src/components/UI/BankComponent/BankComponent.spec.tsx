@@ -1,19 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { ReactElement, useEffect } from 'react';
+import { ReactElement } from 'react';
 import { BankComponent } from 'components/UI/BankComponent/index';
-import { useModal } from 'hooks/useModal';
-import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil';
-import { BankOperationModal } from 'components/modals/BankOperationModal';
-import { eventsAtom } from 'store/events-atom';
+import { RecoilRoot } from 'recoil';
 import { Bank } from 'interfaces/bank';
 import { ModalConstructor } from 'components/modals/modal/ModalConstructor';
 
-
-let testbank : Bank 
-{
-    money : 1000;
-
-}
+const testbank: Bank = {
+    money: 1000,
+};
 
 const renderWithRecoil = (component: ReactElement) => render(<RecoilRoot>{component}</RecoilRoot>);
 
@@ -29,7 +23,7 @@ const TestApp = () => {
 
 describe('BankComponent', () => {
     it('should renders correctly', () => {
-        renderWithRecoil( <BankComponent bank={testbank} />);
+        renderWithRecoil(<BankComponent bank={testbank} />);
         expect(screen.getByRole('button')).toBeInTheDocument();
     });
     it('should open modal after click', () => {
@@ -45,6 +39,4 @@ describe('BankComponent', () => {
 
         expect(modal).toBeInTheDocument();
     });
-
 });
-
