@@ -1,4 +1,5 @@
 import { Input } from 'components/UI/Input';
+import { numberMask } from 'constants/number-mask';
 import { useSocket } from 'hooks/useSocket';
 import { GameOperationType } from 'interfaces/operations/game-operation-type.enum';
 import { ChangeEvent, useState, VFC } from 'react';
@@ -21,15 +22,16 @@ export const BankOperationModal: VFC = () => {
     const socket = useSocket();
 
     const handleSendMoney = () => {
-        if (+money > Number(myPlayer?.money)) {
+        const parsedMoney = money.replace(/_/gi, '');
+        if (+parsedMoney > Number(myPlayer?.money)) {
             setError('У вас нет столько денег!');
-        } else if (!isNaN(+money)) {
+        } else if (!isNaN(+parsedMoney)) {
             socket?.emit('operation', {
                 gameId: game?.id,
                 operation: {
                     type: GameOperationType.SEND_MONEY_TO_BANK,
                     playerId: myId,
-                    money: +money,
+                    money: +parsedMoney,
                 },
             });
             closeModal();
@@ -39,13 +41,14 @@ export const BankOperationModal: VFC = () => {
     };
 
     const handleGetMoney = () => {
-        if (!isNaN(+money)) {
+        const parsedMoney = money.replace(/_/gi, '');
+        if (!isNaN(+parsedMoney)) {
             socket?.emit('operation', {
                 gameId: game?.id,
                 operation: {
                     type: GameOperationType.GET_MONEY_FROM_BANK,
                     playerId: myId,
-                    money: +money,
+                    money: +parsedMoney,
                 },
             });
             closeModal();
@@ -76,7 +79,7 @@ export const BankOperationModal: VFC = () => {
                     onChange={handleMoneyChange}
                     className={styles.input}
                     placeholder='Введите сумму'
-                    type='number'
+                    mask={numberMask}
                     hasError={!!error}
                     autoFocus
                 />

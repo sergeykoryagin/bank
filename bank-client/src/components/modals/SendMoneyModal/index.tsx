@@ -1,4 +1,5 @@
 import { Input } from 'components/UI/Input';
+import { numberMask } from 'constants/number-mask';
 import { useSocket } from 'hooks/useSocket';
 import { GameOperationType } from 'interfaces/operations/game-operation-type.enum';
 import { Player } from 'interfaces/player';
@@ -41,15 +42,15 @@ export const SendMoneyModal: VFC<Props> = ({ player }: Props) => {
     };
 
     const handleMoneyChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const money = event.target.value;
-        if (+money > Number(myPlayer?.money)) {
+        const parsedMoney = event.target.value.replace(/_/gi, '');
+        if (+parsedMoney > Number(myPlayer?.money)) {
             setError('У вас нет столько денег!');
         } else if (+money <= 0) {
             setMoney('1');
         } else {
             setError('');
         }
-        setMoney(money);
+        setMoney(parsedMoney);
     };
 
     return (
@@ -64,7 +65,7 @@ export const SendMoneyModal: VFC<Props> = ({ player }: Props) => {
                     onChange={handleMoneyChange}
                     className={styles.input}
                     placeholder='Введите сумму'
-                    type='number'
+                    mask={numberMask}
                     hasError={!!error}
                     autoFocus
                 />
