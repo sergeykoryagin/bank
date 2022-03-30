@@ -3,6 +3,7 @@ import { ColorPicker } from 'components/UI/ColorPicker';
 import { Input } from 'components/UI/Input';
 import { Switch } from 'components/UI/Switch';
 import { backgroundColors } from 'constants/background-colors';
+import { numberMask } from 'constants/number-mask';
 import { useFormik } from 'formik';
 import { GameSettings } from 'interfaces/settings/game-settings';
 import { useCallback, VFC } from 'react';
@@ -21,7 +22,16 @@ export const CreateGameModal: VFC = () => {
 
     const onSubmit = useCallback(
         (settings: GameSettings) => {
-            socket?.emit('createGame', { hostname: username, settings });
+            const parsedStartMoney = +settings.startMoney.toString().replace(/_/gi, '');
+            const parsedBankStartMoney = +settings.bank.startMoney.toString().replace(/_/gi, '');
+            socket?.emit('createGame', {
+                hostname: username,
+                settings: {
+                    ...settings,
+                    startMoney: +parsedStartMoney,
+                    bank: { ...settings.bank, startMoney: +parsedBankStartMoney },
+                },
+            });
         },
         [username, socket],
     );
@@ -44,6 +54,7 @@ export const CreateGameModal: VFC = () => {
                         <Input
                             name='startMoney'
                             value={values.startMoney}
+                            mask={numberMask}
                             placeholder='Деньги'
                             onChange={handleChange}
                             className={styles.input}
@@ -55,6 +66,7 @@ export const CreateGameModal: VFC = () => {
                             name='bank.startMoney'
                             value={values.bank.startMoney}
                             placeholder='Банк'
+                            mask={numberMask}
                             onChange={handleChange}
                             className={styles.input}
                         />
