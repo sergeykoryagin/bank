@@ -10,7 +10,7 @@ export const SocketProvider: FC = ({ children }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const socket: Socket = io('http://10.17.32.25:8080', {
+        const socket: Socket = io(`${process.env.REACT_APP_API_URL}`, {
             transports: ['websocket'],
         });
         setSocket(socket);
