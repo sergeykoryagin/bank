@@ -34,7 +34,7 @@ export const Lobby: VFC = () => {
     };
 
     return (
-        <div className={styles.lobby}>
+        <div className={styles.lobby} style={{ backgroundColor: game?.settings.backgroundColor }}>
             <div className={styles.header}>
                 <BackButton className={styles.backButton} href='/menu' />
                 <h2 className={styles.title}>

@@ -51,7 +51,7 @@ export const Game: VFC = () => {
     );
 
     return (
-        <div className={styles.game}>
+        <div className={styles.game} style={{ backgroundColor: game?.settings.backgroundColor }}>
             <div className={styles.topWrapper}>
                 <BackButton className={styles.backButton} href='/menu' />
                 {game?.bank && <BankComponent bank={game.bank} className={styles.bank} />}
