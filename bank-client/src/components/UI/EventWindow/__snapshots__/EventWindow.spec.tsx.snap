@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Input component should render correctly 1`] = `
+<div>
+  <button
+    class="button"
+  >
+    <ul
+      class="eventWindow"
+    />
+  </button>
+</div>
+`;

@@ -22,6 +22,7 @@ export const Switch: VFC<Props> = ({ onChange, className, disabled, checked, nam
                 style={{ transform: `translateX(${checked ? '24px' : '0px'})` }}
             />
             <input
+                checked={checked}
                 name={name}
                 onChange={onChange}
                 className={styles.input}
