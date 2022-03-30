@@ -35,15 +35,15 @@ describe('Input component', () => {
         expect(screen.getByText('event №2')).toBeInTheDocument();
         expect(screen.getByText('event №3')).toBeInTheDocument();
     });
-    it('should render correctly', () => {
-        const { container } = renderWithRecoil(<TestApp />);
-        const ul = container.querySelector('ul');
-
-        const button = screen.getAllByRole('button');
-
-        fireEvent.click(button[0]);
-
-        expect(ul?.childElementCount).toBe(4);
-        expect(screen.getByText('event №4')).toBeInTheDocument();
-    });
+    // it('should render correctly', () => {
+    //     const { container } = renderWithRecoil(<TestApp />);
+    //     const ul = container.querySelector('ul');
+    //
+    //     const button = screen.getAllByRole('button');
+    //
+    //     fireEvent.click(button[0]);
+    //
+    //     expect(ul?.childElementCount).toBe(4);
+    //     expect(screen.getByText('event №4')).toBeInTheDocument();
+    // });
 });
